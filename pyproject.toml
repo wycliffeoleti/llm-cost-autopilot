@@ -1,0 +1,29 @@
+[build-system]
+requires = ["setuptools>=68"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "llm-cost-autopilot"
+version = "0.1.0"
+description = "BASWE Project 2 - LLM Cost Autopilot (Phase 1: unified model interface)"
+requires-python = ">=3.11"
+dependencies = []
+
+[dependency-groups]
+dev = ["pytest>=8,<9", "ruff>=0.6,<1", "mypy>=1.11,<2"]
+
+[tool.setuptools]
+packages = ["costpilot", "costpilot.providers"]
+
+[tool.pytest.ini_options]
+testpaths = ["tests"]
+
+[tool.ruff]
+line-length = 100
+target-version = "py311"
+
+[tool.mypy]
+python_version = "3.11"
+strict = true
+plugins = []
+exclude = ["tests"]
