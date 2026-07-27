@@ -51,3 +51,15 @@ def has_context(prompt: str) -> bool:
         trailing = prompt.split(":", 1)[1].strip()
         return len(trailing.split()) >= 5
     return False
+
+
+_STRICT_FORMAT_PATTERN = re.compile(r"\bjson\b|\bschema\b|\bfields?:", re.IGNORECASE)
+_SIMPLE_FORMAT_PATTERN = re.compile(r"\blist\b|\btable\b|\bbulleted?\b", re.IGNORECASE)
+
+
+def output_format_complexity(prompt: str) -> int:
+    if _STRICT_FORMAT_PATTERN.search(prompt):
+        return 2
+    if _SIMPLE_FORMAT_PATTERN.search(prompt):
+        return 1
+    return 0
