@@ -15,6 +15,20 @@
     {"id": "c011", "tier": "tier_1", "text": "Reformat this phone number into the standard XXX-XXX-XXXX format: 5551234567."},
     {"id": "c012", "tier": "tier_1", "text": "Convert this currency amount into a plain number without the dollar sign: $1,250.00."},
     {"id": "c013", "tier": "tier_1", "text": "Rewrite this sentence in the past tense: She walks to the store every morning."},
-    {"id": "c014", "tier": "tier_1", "text": "Reformat this key-value text into a simple list: name is Alex, age is 29."}
+    {"id": "c014", "tier": "tier_1", "text": "Reformat this key-value text into a simple list: name is Alex, age is 29."},
+    {"id": "c015", "tier": "tier_1", "text": "Convert this 24-hour time to 12-hour format: 14:30."},
+    {"id": "c016", "tier": "tier_1", "text": "Rewrite this list in reverse order: one, two, three, four, five."},
+    {"id": "c017", "tier": "tier_1", "text": "Reformat this address onto a single line: 123 Maple Street, Springfield, IL, 62704."},
+    {"id": "c018", "tier": "tier_1", "text": "Convert this fraction to a decimal: 3/8."},
+    {"id": "c019", "tier": "tier_1", "text": "Rewrite this sentence so it starts with Although: The flight was delayed, we still arrived on time."},
+    {"id": "c020", "tier": "tier_1", "text": "Reformat this list of numbers in ascending order: 42, 7, 19, 3, 88."},
+    {"id": "c021", "tier": "tier_1", "text": "Convert this Celsius temperature to Fahrenheit: 100."},
+    {"id": "c022", "tier": "tier_1", "text": "Rewrite this heading in sentence case: HOW TO BAKE BREAD AT HOME."},
+    {"id": "c023", "tier": "tier_1", "text": "Reformat these bullet points into a single paragraph: wake up early, exercise, eat breakfast."},
+    {"id": "c024", "tier": "tier_1", "text": "Convert this weight from pounds to kilograms: 150 lbs."},
+    {"id": "c025", "tier": "tier_1", "text": "Extract the shipping address from this text: John Smith, 42 Baker Street, London, NW1 6XE, United Kingdom."},
+    {"id": "c026", "tier": "tier_1", "text": "Pull out all the dates mentioned in this paragraph: The project kicked off on March 3rd, had a checkpoint on April 15th, and is due to wrap up by June 1st."},
+    {"id": "c027", "tier": "tier_1", "text": "Extract the total amount due from this invoice text: Subtotal $340.00, Tax $27.20, Total $367.20."},
+    {"id": "c028", "tier": "tier_1", "text": "Find the email address in this text: For questions, please reach out to support@examplecorp.com during business hours."}
   ]
 }
