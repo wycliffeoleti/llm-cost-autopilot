@@ -2,75 +2,425 @@
   "version": "1.0",
   "status": "ai_drafted_pending_human_review",
   "examples": [
-    {"id": "c001", "tier": "tier_1", "text": "Convert this list of names into alphabetical order: Zara, Michael, Amina, Devon, Priya."},
-    {"id": "c002", "tier": "tier_1", "text": "Rewrite the following sentence in passive voice: The technician repaired the printer this morning."},
-    {"id": "c003", "tier": "tier_1", "text": "Convert these temperatures from Fahrenheit to Celsius: 98.6, 32, 212."},
-    {"id": "c004", "tier": "tier_1", "text": "Reformat this run-on sentence into two shorter sentences: The meeting started late because the projector wasn't working and nobody could find the remote so we had to reschedule the demo for the following day."},
-    {"id": "c005", "tier": "tier_1", "text": "Turn this paragraph into a numbered list of the three steps it describes: First you preheat the oven, then you mix the dry ingredients, and finally you fold in the wet ingredients before baking."},
-    {"id": "c006", "tier": "tier_1", "text": "Convert this date from US format to European format: 03/14/2026."},
-    {"id": "c007", "tier": "tier_1", "text": "Rewrite this sentence to remove all contractions: I don't think we'll make it, but we can't be sure yet."},
-    {"id": "c008", "tier": "tier_1", "text": "Reformat this comma-separated list into a bulleted list: apples, oranges, bananas, grapes."},
-    {"id": "c009", "tier": "tier_1", "text": "Convert this measurement from miles to kilometers: 26.2 miles."},
-    {"id": "c010", "tier": "tier_1", "text": "Rewrite this title in title case: the quick fox and the lazy dog."},
-    {"id": "c011", "tier": "tier_1", "text": "Reformat this phone number into the standard XXX-XXX-XXXX format: 5551234567."},
-    {"id": "c012", "tier": "tier_1", "text": "Convert this currency amount into a plain number without the dollar sign: $1,250.00."},
-    {"id": "c013", "tier": "tier_1", "text": "Rewrite this sentence in the past tense: She walks to the store every morning."},
-    {"id": "c014", "tier": "tier_1", "text": "Reformat this key-value text into a simple list: name is Alex, age is 29."},
-    {"id": "c015", "tier": "tier_1", "text": "Convert this 24-hour time to 12-hour format: 14:30."},
-    {"id": "c016", "tier": "tier_1", "text": "Rewrite this list in reverse order: one, two, three, four, five."},
-    {"id": "c017", "tier": "tier_1", "text": "Reformat this address onto a single line: 123 Maple Street, Springfield, IL, 62704."},
-    {"id": "c018", "tier": "tier_1", "text": "Convert this fraction to a decimal: 3/8."},
-    {"id": "c019", "tier": "tier_1", "text": "Rewrite this sentence so it starts with Although: The flight was delayed, we still arrived on time."},
-    {"id": "c020", "tier": "tier_1", "text": "Reformat this list of numbers in ascending order: 42, 7, 19, 3, 88."},
-    {"id": "c021", "tier": "tier_1", "text": "Convert this Celsius temperature to Fahrenheit: 100."},
-    {"id": "c022", "tier": "tier_1", "text": "Rewrite this heading in sentence case: HOW TO BAKE BREAD AT HOME."},
-    {"id": "c023", "tier": "tier_1", "text": "Reformat these bullet points into a single paragraph: wake up early, exercise, eat breakfast."},
-    {"id": "c024", "tier": "tier_1", "text": "Convert this weight from pounds to kilograms: 150 lbs."},
-    {"id": "c025", "tier": "tier_1", "text": "Extract the shipping address from this text: John Smith, 42 Baker Street, London, NW1 6XE, United Kingdom."},
-    {"id": "c026", "tier": "tier_1", "text": "Pull out all the dates mentioned in this paragraph: The project kicked off on March 3rd, had a checkpoint on April 15th, and is due to wrap up by June 1st."},
-    {"id": "c027", "tier": "tier_1", "text": "Extract the total amount due from this invoice text: Subtotal $340.00, Tax $27.20, Total $367.20."},
-    {"id": "c028", "tier": "tier_1", "text": "Find the email address in this text: For questions, please reach out to support@examplecorp.com during business hours."},
-    {"id": "c029", "tier": "tier_1", "text": "Extract the flight number from this confirmation text: Your booking is confirmed for flight AA1234 departing at 6:45 AM."},
-    {"id": "c030", "tier": "tier_1", "text": "Pull the author's name from this book excerpt: Silent Tides, a novel by Elena Marchetti, explores grief and memory."},
-    {"id": "c031", "tier": "tier_1", "text": "Extract the phone number from this text: You can reach the front desk at 555-867-5309 anytime."},
-    {"id": "c032", "tier": "tier_1", "text": "Find the product SKU in this description: Wireless Mouse, Model WM-2200, SKU RT-88213."},
-    {"id": "c033", "tier": "tier_1", "text": "Extract the meeting time from this email snippet: Let's sync up on Thursday at 3:00 PM in the main conference room."},
-    {"id": "c034", "tier": "tier_1", "text": "Pull out the zip code from this address: 1600 Pennsylvania Avenue NW, Washington, DC 20500."},
-    {"id": "c035", "tier": "tier_1", "text": "Extract the order number from this receipt text: Thank you for your purchase, order A29384 has shipped."},
-    {"id": "c036", "tier": "tier_1", "text": "Find the temperature reading in this sensor log line: timestamp 2026-03-01T08:00:00 sensor_id 12 reading 21.4C status ok."},
-    {"id": "c037", "tier": "tier_1", "text": "Extract the CEO's name from this press release: Acme Robotics announced today that CEO Priya Nair will present at the upcoming tech summit."},
-    {"id": "c038", "tier": "tier_1", "text": "Pull the ISBN from this book listing: The Silent Wave, Hardcover, ISBN 978-1-234567-89-0, Published 2024."},
-    {"id": "c039", "tier": "tier_1", "text": "Extract the discount percentage from this promo text: Use code SAVE20 for 20% off your next order through Friday."},
-    {"id": "c040", "tier": "tier_1", "text": "Find the error code in this log line: ERROR 503 Service Unavailable, upstream connection refused."},
-    {"id": "c041", "tier": "tier_1", "text": "Extract the checkout time from this hotel confirmation: Check-in 3:00 PM, Check-out 11:00 AM, Room type Deluxe King."},
-    {"id": "c042", "tier": "tier_1", "text": "Pull the license plate number from this text: The reported vehicle had license plate number 7XKT204."},
-    {"id": "c043", "tier": "tier_1", "text": "Extract the interest rate from this loan summary: Loan amount $15,000, APR 6.25%, Term 60 months."},
-    {"id": "c044", "tier": "tier_1", "text": "Find the tracking number in this shipping notification: Your package has shipped via UPS, tracking number 1Z999AA10123456784."},
-    {"id": "c045", "tier": "tier_1", "text": "Extract the job title from this profile snippet: Maria Chen, Senior Data Engineer at Northwind Analytics."},
-    {"id": "c046", "tier": "tier_1", "text": "Pull the currency code from this transaction record: Amount 250.00 EUR, Merchant Cafe Lumiere, Date 2026-02-14."},
-    {"id": "c047", "tier": "tier_1", "text": "Extract the room number from this hotel note: Guest has been assigned to Room 412 on the fourth floor."},
-    {"id": "c048", "tier": "tier_1", "text": "What is the capital of Japan?"},
-    {"id": "c049", "tier": "tier_1", "text": "Based on this paragraph, what year did the company relocate its headquarters? Founded in 1998, the company grew steadily and relocated its headquarters to Austin in 2015 to be closer to its engineering talent pool."},
-    {"id": "c050", "tier": "tier_1", "text": "According to this text, who is the CEO of the company? Northwind Robotics, led by CEO David Okafor since 2020, specializes in warehouse automation."},
-    {"id": "c051", "tier": "tier_1", "text": "How many legs does a spider have?"},
-    {"id": "c052", "tier": "tier_1", "text": "Based on this weather report, will it rain tomorrow? Tomorrow's forecast shows a 70 percent chance of rain with highs near 60F and gusty winds in the afternoon."},
-    {"id": "c053", "tier": "tier_1", "text": "What is the boiling point of water at sea level in Celsius?"},
-    {"id": "c054", "tier": "tier_1", "text": "According to this excerpt, what caused the delay in the shipment? The shipment was delayed due to a customs inspection triggered by incomplete paperwork on the exporter's side."},
-    {"id": "c055", "tier": "tier_1", "text": "Who wrote the novel Pride and Prejudice?"},
-    {"id": "c056", "tier": "tier_1", "text": "Based on this passage, how many employees does the company have? With just under 500 employees spread across three offices, the company has doubled in size since its last funding round."},
-    {"id": "c057", "tier": "tier_1", "text": "What is the chemical symbol for gold?"},
-    {"id": "c058", "tier": "tier_1", "text": "According to this bio, where did the author grow up? Born in rural Kenya, the author later moved to London to pursue a career in journalism."},
-    {"id": "c059", "tier": "tier_1", "text": "What is the largest planet in our solar system?"},
-    {"id": "c060", "tier": "tier_1", "text": "Based on this paragraph, what triggered the recall? The recall was issued after several units were found to have a faulty battery connector that posed a fire risk."},
-    {"id": "c061", "tier": "tier_1", "text": "Who is credited with inventing the telephone?"},
-    {"id": "c062", "tier": "tier_1", "text": "According to this schedule, what time does the last train depart? Trains run every 20 minutes until the last departure at 11:40 PM."},
-    {"id": "c063", "tier": "tier_1", "text": "What is the freezing point of water in Fahrenheit?"},
-    {"id": "c064", "tier": "tier_1", "text": "Based on this text, what was the main reason for the merger? The two companies merged primarily to combine their complementary technology stacks and expand into new markets together."},
-    {"id": "c065", "tier": "tier_1", "text": "How many continents are there on Earth?"},
-    {"id": "c066", "tier": "tier_1", "text": "According to this memo, who approved the budget increase? The revised budget was approved by the finance director following a review of Q3 spending."},
-    {"id": "c067", "tier": "tier_1", "text": "What year did World War II end?"},
-    {"id": "c068", "tier": "tier_1", "text": "Based on this passage, what is the warranty period for the product? The product comes with a standard one-year warranty covering manufacturing defects, extendable to three years for an additional fee."},
-    {"id": "c069", "tier": "tier_1", "text": "What is the currency used in Japan?"},
-    {"id": "c070", "tier": "tier_1", "text": "According to this note, why was the flight rescheduled? The flight was rescheduled due to a mechanical issue discovered during the pre-flight inspection."}
+    {
+      "id": "c001",
+      "tier": "tier_1",
+      "text": "Convert this list of names into alphabetical order: Zara, Michael, Amina, Devon, Priya."
+    },
+    {
+      "id": "c002",
+      "tier": "tier_1",
+      "text": "Rewrite the following sentence in passive voice: The technician repaired the printer this morning."
+    },
+    {
+      "id": "c003",
+      "tier": "tier_1",
+      "text": "Convert these temperatures from Fahrenheit to Celsius: 98.6, 32, 212."
+    },
+    {
+      "id": "c004",
+      "tier": "tier_1",
+      "text": "Reformat this run-on sentence into two shorter sentences: The meeting started late because the projector wasn't working and nobody could find the remote so we had to reschedule the demo for the following day."
+    },
+    {
+      "id": "c005",
+      "tier": "tier_1",
+      "text": "Turn this paragraph into a numbered list of the three steps it describes: First you preheat the oven, then you mix the dry ingredients, and finally you fold in the wet ingredients before baking."
+    },
+    {
+      "id": "c006",
+      "tier": "tier_1",
+      "text": "Convert this date from US format to European format: 03/14/2026."
+    },
+    {
+      "id": "c007",
+      "tier": "tier_1",
+      "text": "Rewrite this sentence to remove all contractions: I don't think we'll make it, but we can't be sure yet."
+    },
+    {
+      "id": "c008",
+      "tier": "tier_1",
+      "text": "Reformat this comma-separated list into a bulleted list: apples, oranges, bananas, grapes."
+    },
+    {
+      "id": "c009",
+      "tier": "tier_1",
+      "text": "Convert this measurement from miles to kilometers: 26.2 miles."
+    },
+    {
+      "id": "c010",
+      "tier": "tier_1",
+      "text": "Rewrite this title in title case: the quick fox and the lazy dog."
+    },
+    {
+      "id": "c011",
+      "tier": "tier_1",
+      "text": "Reformat this phone number into the standard XXX-XXX-XXXX format: 5551234567."
+    },
+    {
+      "id": "c012",
+      "tier": "tier_1",
+      "text": "Convert this currency amount into a plain number without the dollar sign: $1,250.00."
+    },
+    {
+      "id": "c013",
+      "tier": "tier_1",
+      "text": "Rewrite this sentence in the past tense: She walks to the store every morning."
+    },
+    {
+      "id": "c014",
+      "tier": "tier_1",
+      "text": "Reformat this key-value text into a simple list: name is Alex, age is 29."
+    },
+    {
+      "id": "c015",
+      "tier": "tier_1",
+      "text": "Convert this 24-hour time to 12-hour format: 14:30."
+    },
+    {
+      "id": "c016",
+      "tier": "tier_1",
+      "text": "Rewrite this list in reverse order: one, two, three, four, five."
+    },
+    {
+      "id": "c017",
+      "tier": "tier_1",
+      "text": "Reformat this address onto a single line: 123 Maple Street, Springfield, IL, 62704."
+    },
+    {
+      "id": "c018",
+      "tier": "tier_1",
+      "text": "Convert this fraction to a decimal: 3/8."
+    },
+    {
+      "id": "c019",
+      "tier": "tier_1",
+      "text": "Rewrite this sentence so it starts with Although: The flight was delayed, we still arrived on time."
+    },
+    {
+      "id": "c020",
+      "tier": "tier_1",
+      "text": "Reformat this list of numbers in ascending order: 42, 7, 19, 3, 88."
+    },
+    {
+      "id": "c021",
+      "tier": "tier_1",
+      "text": "Convert this Celsius temperature to Fahrenheit: 100."
+    },
+    {
+      "id": "c022",
+      "tier": "tier_1",
+      "text": "Rewrite this heading in sentence case: HOW TO BAKE BREAD AT HOME."
+    },
+    {
+      "id": "c023",
+      "tier": "tier_1",
+      "text": "Reformat these bullet points into a single paragraph: wake up early, exercise, eat breakfast."
+    },
+    {
+      "id": "c024",
+      "tier": "tier_1",
+      "text": "Convert this weight from pounds to kilograms: 150 lbs."
+    },
+    {
+      "id": "c025",
+      "tier": "tier_1",
+      "text": "Extract the shipping address from this text: John Smith, 42 Baker Street, London, NW1 6XE, United Kingdom."
+    },
+    {
+      "id": "c026",
+      "tier": "tier_1",
+      "text": "Pull out all the dates mentioned in this paragraph: The project kicked off on March 3rd, had a checkpoint on April 15th, and is due to wrap up by June 1st."
+    },
+    {
+      "id": "c027",
+      "tier": "tier_1",
+      "text": "Extract the total amount due from this invoice text: Subtotal $340.00, Tax $27.20, Total $367.20."
+    },
+    {
+      "id": "c028",
+      "tier": "tier_1",
+      "text": "Find the email address in this text: For questions, please reach out to support@examplecorp.com during business hours."
+    },
+    {
+      "id": "c029",
+      "tier": "tier_1",
+      "text": "Extract the flight number from this confirmation text: Your booking is confirmed for flight AA1234 departing at 6:45 AM."
+    },
+    {
+      "id": "c030",
+      "tier": "tier_1",
+      "text": "Pull the author's name from this book excerpt: Silent Tides, a novel by Elena Marchetti, explores grief and memory."
+    },
+    {
+      "id": "c031",
+      "tier": "tier_1",
+      "text": "Extract the phone number from this text: You can reach the front desk at 555-867-5309 anytime."
+    },
+    {
+      "id": "c032",
+      "tier": "tier_1",
+      "text": "Find the product SKU in this description: Wireless Mouse, Model WM-2200, SKU RT-88213."
+    },
+    {
+      "id": "c033",
+      "tier": "tier_1",
+      "text": "Extract the meeting time from this email snippet: Let's sync up on Thursday at 3:00 PM in the main conference room."
+    },
+    {
+      "id": "c034",
+      "tier": "tier_1",
+      "text": "Pull out the zip code from this address: 1600 Pennsylvania Avenue NW, Washington, DC 20500."
+    },
+    {
+      "id": "c035",
+      "tier": "tier_1",
+      "text": "Extract the order number from this receipt text: Thank you for your purchase, order A29384 has shipped."
+    },
+    {
+      "id": "c036",
+      "tier": "tier_1",
+      "text": "Find the temperature reading in this sensor log line: timestamp 2026-03-01T08:00:00 sensor_id 12 reading 21.4C status ok."
+    },
+    {
+      "id": "c037",
+      "tier": "tier_1",
+      "text": "Extract the CEO's name from this press release: Acme Robotics announced today that CEO Priya Nair will present at the upcoming tech summit."
+    },
+    {
+      "id": "c038",
+      "tier": "tier_1",
+      "text": "Pull the ISBN from this book listing: The Silent Wave, Hardcover, ISBN 978-1-234567-89-0, Published 2024."
+    },
+    {
+      "id": "c039",
+      "tier": "tier_1",
+      "text": "Extract the discount percentage from this promo text: Use code SAVE20 for 20% off your next order through Friday."
+    },
+    {
+      "id": "c040",
+      "tier": "tier_1",
+      "text": "Find the error code in this log line: ERROR 503 Service Unavailable, upstream connection refused."
+    },
+    {
+      "id": "c041",
+      "tier": "tier_1",
+      "text": "Extract the checkout time from this hotel confirmation: Check-in 3:00 PM, Check-out 11:00 AM, Room type Deluxe King."
+    },
+    {
+      "id": "c042",
+      "tier": "tier_1",
+      "text": "Pull the license plate number from this text: The reported vehicle had license plate number 7XKT204."
+    },
+    {
+      "id": "c043",
+      "tier": "tier_1",
+      "text": "Extract the interest rate from this loan summary: Loan amount $15,000, APR 6.25%, Term 60 months."
+    },
+    {
+      "id": "c044",
+      "tier": "tier_1",
+      "text": "Find the tracking number in this shipping notification: Your package has shipped via UPS, tracking number 1Z999AA10123456784."
+    },
+    {
+      "id": "c045",
+      "tier": "tier_1",
+      "text": "Extract the job title from this profile snippet: Maria Chen, Senior Data Engineer at Northwind Analytics."
+    },
+    {
+      "id": "c046",
+      "tier": "tier_1",
+      "text": "Pull the currency code from this transaction record: Amount 250.00 EUR, Merchant Cafe Lumiere, Date 2026-02-14."
+    },
+    {
+      "id": "c047",
+      "tier": "tier_1",
+      "text": "Extract the room number from this hotel note: Guest has been assigned to Room 412 on the fourth floor."
+    },
+    {
+      "id": "c048",
+      "tier": "tier_1",
+      "text": "What is the capital of Japan?"
+    },
+    {
+      "id": "c049",
+      "tier": "tier_1",
+      "text": "Based on this paragraph, what year did the company relocate its headquarters? Founded in 1998, the company grew steadily and relocated its headquarters to Austin in 2015 to be closer to its engineering talent pool."
+    },
+    {
+      "id": "c050",
+      "tier": "tier_1",
+      "text": "According to this text, who is the CEO of the company? Northwind Robotics, led by CEO David Okafor since 2020, specializes in warehouse automation."
+    },
+    {
+      "id": "c051",
+      "tier": "tier_1",
+      "text": "How many legs does a spider have?"
+    },
+    {
+      "id": "c052",
+      "tier": "tier_1",
+      "text": "Based on this weather report, will it rain tomorrow? Tomorrow's forecast shows a 70 percent chance of rain with highs near 60F and gusty winds in the afternoon."
+    },
+    {
+      "id": "c053",
+      "tier": "tier_1",
+      "text": "What is the boiling point of water at sea level in Celsius?"
+    },
+    {
+      "id": "c054",
+      "tier": "tier_1",
+      "text": "According to this excerpt, what caused the delay in the shipment? The shipment was delayed due to a customs inspection triggered by incomplete paperwork on the exporter's side."
+    },
+    {
+      "id": "c055",
+      "tier": "tier_1",
+      "text": "Who wrote the novel Pride and Prejudice?"
+    },
+    {
+      "id": "c056",
+      "tier": "tier_1",
+      "text": "Based on this passage, how many employees does the company have? With just under 500 employees spread across three offices, the company has doubled in size since its last funding round."
+    },
+    {
+      "id": "c057",
+      "tier": "tier_1",
+      "text": "What is the chemical symbol for gold?"
+    },
+    {
+      "id": "c058",
+      "tier": "tier_1",
+      "text": "According to this bio, where did the author grow up? Born in rural Kenya, the author later moved to London to pursue a career in journalism."
+    },
+    {
+      "id": "c059",
+      "tier": "tier_1",
+      "text": "What is the largest planet in our solar system?"
+    },
+    {
+      "id": "c060",
+      "tier": "tier_1",
+      "text": "Based on this paragraph, what triggered the recall? The recall was issued after several units were found to have a faulty battery connector that posed a fire risk."
+    },
+    {
+      "id": "c061",
+      "tier": "tier_1",
+      "text": "Who is credited with inventing the telephone?"
+    },
+    {
+      "id": "c062",
+      "tier": "tier_1",
+      "text": "According to this schedule, what time does the last train depart? Trains run every 20 minutes until the last departure at 11:40 PM."
+    },
+    {
+      "id": "c063",
+      "tier": "tier_1",
+      "text": "What is the freezing point of water in Fahrenheit?"
+    },
+    {
+      "id": "c064",
+      "tier": "tier_1",
+      "text": "Based on this text, what was the main reason for the merger? The two companies merged primarily to combine their complementary technology stacks and expand into new markets together."
+    },
+    {
+      "id": "c065",
+      "tier": "tier_1",
+      "text": "How many continents are there on Earth?"
+    },
+    {
+      "id": "c066",
+      "tier": "tier_1",
+      "text": "According to this memo, who approved the budget increase? The revised budget was approved by the finance director following a review of Q3 spending."
+    },
+    {
+      "id": "c067",
+      "tier": "tier_1",
+      "text": "What year did World War II end?"
+    },
+    {
+      "id": "c068",
+      "tier": "tier_1",
+      "text": "Based on this passage, what is the warranty period for the product? The product comes with a standard one-year warranty covering manufacturing defects, extendable to three years for an additional fee."
+    },
+    {
+      "id": "c069",
+      "tier": "tier_1",
+      "text": "What is the currency used in Japan?"
+    },
+    {
+      "id": "c070",
+      "tier": "tier_1",
+      "text": "According to this note, why was the flight rescheduled? The flight was rescheduled due to a mechanical issue discovered during the pre-flight inspection."
+    },
+    {
+      "id": "c071",
+      "tier": "tier_2",
+      "text": "Summarize this article in three sentences: Renewable energy adoption has accelerated globally over the past decade, driven by falling solar and wind costs, supportive government policy, and growing corporate demand for clean power. Grid operators are increasingly investing in battery storage to manage the intermittency of these sources. Analysts expect renewables to account for the majority of new electricity generation capacity added worldwide through the end of the decade."
+    },
+    {
+      "id": "c072",
+      "tier": "tier_2",
+      "text": "Provide a one-paragraph summary of this meeting transcript: The team discussed Q2 roadmap priorities, agreeing to delay the mobile redesign in favor of shipping the new billing system first. Engineering raised concerns about staffing, and the group agreed to revisit headcount needs in the next planning cycle. Marketing requested earlier visibility into feature timelines going forward."
+    },
+    {
+      "id": "c073",
+      "tier": "tier_2",
+      "text": "Summarize the key findings of this research abstract in two sentences: This study examined sleep patterns in 300 shift workers over six months, finding that irregular shift schedules were associated with a 40 percent higher rate of reported insomnia compared to fixed schedules. Interventions involving controlled light exposure modestly improved sleep quality in the irregular-shift group."
+    },
+    {
+      "id": "c074",
+      "tier": "tier_2",
+      "text": "Condense this customer support ticket thread into a short summary for the account manager: Customer reported the app crashing on login. Support asked for device info and logs. Customer provided an iOS 17 device and crash logs. Engineering identified a token refresh bug and shipped a fix in the next release."
+    },
+    {
+      "id": "c075",
+      "tier": "tier_2",
+      "text": "Summarize this product changelog entry for a non-technical audience: Version 3.4.0 introduces lazy-loading for the dashboard's chart widgets, reducing initial page load time by roughly 35 percent, along with a fix for a memory leak in the real-time notification service and improved error messages across the settings pages."
+    },
+    {
+      "id": "c076",
+      "tier": "tier_2",
+      "text": "Write a brief summary of this legal notice for a general audience: This notice informs affected users that a data processing vendor experienced an unauthorized access incident between January 3 and January 9, potentially exposing names and email addresses, though no financial information was involved."
+    },
+    {
+      "id": "c077",
+      "tier": "tier_2",
+      "text": "Summarize the plot of this short story synopsis in one paragraph: A retired lighthouse keeper discovers a message in a bottle that leads her back to a childhood friend she believed had died at sea decades earlier, forcing her to confront long-buried guilt over their final conversation."
+    },
+    {
+      "id": "c078",
+      "tier": "tier_2",
+      "text": "Provide a two-sentence summary of this quarterly earnings statement: Revenue grew 12 percent year over year to $340 million, driven primarily by strength in the subscription segment, while operating margin narrowed slightly due to increased investment in customer support headcount."
+    },
+    {
+      "id": "c079",
+      "tier": "tier_2",
+      "text": "Summarize this employee handbook section on remote work: Employees may work remotely up to three days per week with manager approval, must remain reachable during core hours of 10 AM to 3 PM local time, and are responsible for maintaining a secure home network setup."
+    },
+    {
+      "id": "c080",
+      "tier": "tier_2",
+      "text": "Condense this scientific paper's methodology section into plain language: Participants were randomly assigned to either a control group receiving standard care or a treatment group receiving a twice-weekly telehealth check-in, with outcomes measured via a validated symptom questionnaire administered at baseline, six weeks, and twelve weeks."
+    },
+    {
+      "id": "c081",
+      "tier": "tier_2",
+      "text": "Summarize the main complaint in this customer review: I ordered the blue version but received the black one, and when I called support I was on hold for over 40 minutes before anyone answered, and even then they couldn't tell me when a replacement would ship."
+    },
+    {
+      "id": "c082",
+      "tier": "tier_2",
+      "text": "Provide a short summary of this incident report for leadership: At 2:14 AM, the payments service began returning elevated error rates due to a database connection pool exhaustion issue. On-call engineers restored service by 2:41 AM after scaling the connection pool and restarting the affected pods."
+    },
+    {
+      "id": "c083",
+      "tier": "tier_2",
+      "text": "Summarize this travel itinerary in a few sentences: Day one, arrive in Lisbon, check into hotel, walk the Alfama district. Day two, day trip to Sintra to see the palaces. Day three, free day for shopping before an evening flight home."
+    },
+    {
+      "id": "c084",
+      "tier": "tier_2",
+      "text": "Condense this policy document excerpt about expense reimbursement: Employees must submit itemized receipts for any expense over $25 within 30 days of the purchase, and reimbursements for travel booked outside the approved corporate travel portal require prior manager sign-off."
+    }
   ]
 }
