@@ -29,6 +29,20 @@
     {"id": "c025", "tier": "tier_1", "text": "Extract the shipping address from this text: John Smith, 42 Baker Street, London, NW1 6XE, United Kingdom."},
     {"id": "c026", "tier": "tier_1", "text": "Pull out all the dates mentioned in this paragraph: The project kicked off on March 3rd, had a checkpoint on April 15th, and is due to wrap up by June 1st."},
     {"id": "c027", "tier": "tier_1", "text": "Extract the total amount due from this invoice text: Subtotal $340.00, Tax $27.20, Total $367.20."},
-    {"id": "c028", "tier": "tier_1", "text": "Find the email address in this text: For questions, please reach out to support@examplecorp.com during business hours."}
+    {"id": "c028", "tier": "tier_1", "text": "Find the email address in this text: For questions, please reach out to support@examplecorp.com during business hours."},
+    {"id": "c029", "tier": "tier_1", "text": "Extract the flight number from this confirmation text: Your booking is confirmed for flight AA1234 departing at 6:45 AM."},
+    {"id": "c030", "tier": "tier_1", "text": "Pull the author's name from this book excerpt: Silent Tides, a novel by Elena Marchetti, explores grief and memory."},
+    {"id": "c031", "tier": "tier_1", "text": "Extract the phone number from this text: You can reach the front desk at 555-867-5309 anytime."},
+    {"id": "c032", "tier": "tier_1", "text": "Find the product SKU in this description: Wireless Mouse, Model WM-2200, SKU RT-88213."},
+    {"id": "c033", "tier": "tier_1", "text": "Extract the meeting time from this email snippet: Let's sync up on Thursday at 3:00 PM in the main conference room."},
+    {"id": "c034", "tier": "tier_1", "text": "Pull out the zip code from this address: 1600 Pennsylvania Avenue NW, Washington, DC 20500."},
+    {"id": "c035", "tier": "tier_1", "text": "Extract the order number from this receipt text: Thank you for your purchase, order A29384 has shipped."},
+    {"id": "c036", "tier": "tier_1", "text": "Find the temperature reading in this sensor log line: timestamp 2026-03-01T08:00:00 sensor_id 12 reading 21.4C status ok."},
+    {"id": "c037", "tier": "tier_1", "text": "Extract the CEO's name from this press release: Acme Robotics announced today that CEO Priya Nair will present at the upcoming tech summit."},
+    {"id": "c038", "tier": "tier_1", "text": "Pull the ISBN from this book listing: The Silent Wave, Hardcover, ISBN 978-1-234567-89-0, Published 2024."},
+    {"id": "c039", "tier": "tier_1", "text": "Extract the discount percentage from this promo text: Use code SAVE20 for 20% off your next order through Friday."},
+    {"id": "c040", "tier": "tier_1", "text": "Find the error code in this log line: ERROR 503 Service Unavailable, upstream connection refused."},
+    {"id": "c041", "tier": "tier_1", "text": "Extract the checkout time from this hotel confirmation: Check-in 3:00 PM, Check-out 11:00 AM, Room type Deluxe King."},
+    {"id": "c042", "tier": "tier_1", "text": "Pull the license plate number from this text: The reported vehicle had license plate number 7XKT204."}
   ]
 }
