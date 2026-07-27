@@ -83,47 +83,45 @@ label is a manual judgment call, not generated from a template or assigned
 by construction. Target balance: ~70 examples per tier, so the held-out
 confusion matrix is interpretable without majority-class artifacts.
 
-**Provenance constraint (blocking, unresolved as of this revision):**
+**Provenance constraint (resolved — owner decision, delegated authority):**
 "hand-authored"/"hand-labeled" is a claim about who produced the data — a
 human — not merely about writing style. The assistant must not generate
 dataset content, individually composed or otherwise, and commit or describe
 it as hand-authored human ground truth; that would misrepresent the
 dataset's provenance, which matters both for the classifier's accuracy
-claims and for the project's portfolio narrative. This phase's
-implementation plan must resolve authorship through one of:
+claims and for the project's portfolio narrative.
 
-- **(a) AI-assisted draft, explicitly gated on human review** — the
-  assistant may draft candidate examples, but they are stored/labeled as an
-  unreviewed AI-assisted draft and must not be treated as golden/labeled
-  ground truth (e.g. used in accuracy claims or committed as the production
-  `data/complexity_dataset.json`) until the project owner has reviewed and
-  explicitly approved them.
-- **(b) Owner-input gate** — the assistant builds only the dataset schema,
-  loader, and validation/splitting infrastructure; the actual 210+ examples
-  are supplied by the project owner directly, and no classifier training
-  proceeds until that data exists.
+**Resolution:** path (a), AI-assisted draft explicitly gated on human
+review. The assistant drafts the 210+ examples, but they are stored in a
+separately-named file with explicit provenance metadata and a
+human-review-required flag, and are never described or treated as
+golden/labeled ground truth. Held-out accuracy computed against this draft
+is a **pipeline/prototype validation metric only** — evidence the
+feature-extraction → classifier → evaluation mechanism works end to end —
+**not** a claim about real-world routing quality. The remaining gate before
+this data can be trusted as ground truth is the project owner's manual
+review and approval, which is out of scope for this implementation and
+tracked as an explicit follow-up.
 
-No dataset content has been committed under either path yet. This choice is
-pending project-owner decision and gates the classifier/routing tasks in the
-implementation plan.
-
-**Storage** (`data/complexity_dataset.json`), matching the Phase 1
-`evals/prompts/phase1_baseline.json` convention:
+**Storage** (`data/complexity_dataset.draft.json` — the `.draft` suffix and
+`status` field are load-bearing, not decorative):
 
 ```json
 {
   "version": "1.0",
+  "status": "ai_drafted_pending_human_review",
   "examples": [
     {"id": "c001", "text": "Extract the invoice number from this text: ...", "tier": "tier_1"},
-    {"id": "c002", "text": "Summarize this article in three bullet points: ...", "tier": "tier_2"},
-    {"id": "c003", "text": "Design a caching strategy for a multi-region API and justify the trade-offs.", "tier": "tier_3"}
+    {"id": "c071", "text": "Summarize this article in three bullet points: ...", "tier": "tier_2"},
+    {"id": "c141", "text": "Design a caching strategy for a multi-region API and justify the trade-offs.", "tier": "tier_3"}
   ]
 }
 ```
 
 `tier` is a closed enum (`tier_1 | tier_2 | tier_3`), validated at load time;
 an unrecognized value fails fast rather than silently entering training
-data.
+data. `status` is a required field; the loader returns it alongside the
+examples so every consumer can see the data's review state.
 
 ## 5. Feature extraction (`costpilot/features.py`)
 
@@ -146,13 +144,16 @@ matrix scikit-learn needs by projecting onto a fixed, ordered key list (no
 
 ## 6. Classifier and evaluation (`costpilot/classifier.py`)
 
-- `load_dataset(path: Path) -> list[LabeledExample]` — parses
-  `data/complexity_dataset.json`, validates every `tier` against the closed
-  enum, raises on anything else.
-- `train_test_split_dataset(examples, seed: int, test_size: float = 0.2)` —
-  stratified split preserving each tier's proportion in both halves, using a
-  fixed module-level seed constant so every run reproduces an identical
-  split.
+- `Dataset` (dataclass: `status: str`, `examples: list[LabeledExample]`) and
+  `LabeledExample` (dataclass: `id: str`, `text: str`, `tier: str`).
+- `load_dataset(path: Path) -> Dataset` — parses
+  `data/complexity_dataset.draft.json`, requires and returns the `status`
+  field, validates every `tier` against the closed enum, raises on anything
+  else.
+- `train_test_split_dataset(dataset: Dataset, seed: int, test_size: float =
+  0.2)` — stratified split preserving each tier's proportion in both
+  halves, using a fixed module-level seed constant so every run reproduces
+  an identical split.
 - `train_classifier(train_examples, seed: int) -> LogisticRegression` —
   builds the feature matrix via `features.extract_features`, fits
   `LogisticRegression(max_iter=1000, random_state=seed)`.
@@ -164,13 +165,21 @@ matrix scikit-learn needs by projecting onto a fixed, ordered key list (no
   prompt, returns the predicted tier label.
 
 **`tests/test_classifier.py`:** trains fresh each run (deterministic seed,
-sub-second on ~210 examples × 5 features) and asserts:
+sub-second on ~210 examples × 5 features) against
+`data/complexity_dataset.draft.json` and asserts:
 
-- held-out accuracy ≥ 0.80 (the guide's V1 bar)
+- `dataset.status == "ai_drafted_pending_human_review"` — a sanity pin so
+  the test suite itself documents the data's unreviewed state
+- held-out accuracy ≥ 0.80 (the guide's V1 bar, applied here as a pipeline
+  sanity check — **not** a real-world routing-quality claim, since the
+  underlying data is an unreviewed AI-assisted draft)
 - confusion matrix shape is `(3, 3)` with the fixed label ordering
 
-No persisted report artifact — the pytest assertions are the evidence for
-this phase; no Phase 4 dashboard/audit store is introduced.
+Test and function names make the prototype nature explicit (e.g.
+`test_prototype_held_out_accuracy_on_draft_dataset`) rather than implying
+production validation. No persisted report artifact — the pytest assertions
+are the evidence for this phase; no Phase 4 dashboard/audit store is
+introduced.
 
 ## 7. Routing map and composition (`costpilot/routing.py`)
 
@@ -217,7 +226,7 @@ llm-cost-autopilot/
     classifier.py           # dataset loading, split, train, evaluate, predict_tier
     routing.py              # load_routing_config, route, classify_and_route
   data/
-    complexity_dataset.json     # 210+ hand-authored (prompt, tier) examples
+    complexity_dataset.draft.json   # 210+ AI-drafted (prompt, tier) examples, pending human review
   config/
     routing.yaml                 # tier -> model_id mapping
   tests/
@@ -258,7 +267,9 @@ dependencies = ["scikit-learn>=1.4,<2", "numpy>=1.26,<2", "pyyaml>=6.0,<7"]
 - This document does not claim Phase 2 code, dataset, or dependency
   installation exists yet. It is a design record only, to be followed by an
   implementation plan.
-- No dataset content has been generated or committed. Section 4's provenance
-  constraint (AI-assisted draft with a human-review gate, vs. an
-  owner-input gate) is unresolved and blocks the implementation plan's
-  dataset task until the project owner decides between the two paths.
+- No claim is made, here or anywhere in the implementation, that
+  `data/complexity_dataset.draft.json` is human-labeled ground truth, or
+  that any accuracy/confusion-matrix figure computed against it reflects
+  real-world routing quality. It is AI-drafted, offline, deterministic
+  prototype fixture data pending the project owner's review — that review
+  is the one remaining gate this document does not close.
