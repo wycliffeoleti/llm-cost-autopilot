@@ -1,0 +1,20 @@
+{
+  "version": "1.0",
+  "status": "ai_drafted_pending_human_review",
+  "examples": [
+    {"id": "c001", "tier": "tier_1", "text": "Convert this list of names into alphabetical order: Zara, Michael, Amina, Devon, Priya."},
+    {"id": "c002", "tier": "tier_1", "text": "Rewrite the following sentence in passive voice: The technician repaired the printer this morning."},
+    {"id": "c003", "tier": "tier_1", "text": "Convert these temperatures from Fahrenheit to Celsius: 98.6, 32, 212."},
+    {"id": "c004", "tier": "tier_1", "text": "Reformat this run-on sentence into two shorter sentences: The meeting started late because the projector wasn't working and nobody could find the remote so we had to reschedule the demo for the following day."},
+    {"id": "c005", "tier": "tier_1", "text": "Turn this paragraph into a numbered list of the three steps it describes: First you preheat the oven, then you mix the dry ingredients, and finally you fold in the wet ingredients before baking."},
+    {"id": "c006", "tier": "tier_1", "text": "Convert this date from US format to European format: 03/14/2026."},
+    {"id": "c007", "tier": "tier_1", "text": "Rewrite this sentence to remove all contractions: I don't think we'll make it, but we can't be sure yet."},
+    {"id": "c008", "tier": "tier_1", "text": "Reformat this comma-separated list into a bulleted list: apples, oranges, bananas, grapes."},
+    {"id": "c009", "tier": "tier_1", "text": "Convert this measurement from miles to kilometers: 26.2 miles."},
+    {"id": "c010", "tier": "tier_1", "text": "Rewrite this title in title case: the quick fox and the lazy dog."},
+    {"id": "c011", "tier": "tier_1", "text": "Reformat this phone number into the standard XXX-XXX-XXXX format: 5551234567."},
+    {"id": "c012", "tier": "tier_1", "text": "Convert this currency amount into a plain number without the dollar sign: $1,250.00."},
+    {"id": "c013", "tier": "tier_1", "text": "Rewrite this sentence in the past tense: She walks to the store every morning."},
+    {"id": "c014", "tier": "tier_1", "text": "Reformat this key-value text into a simple list: name is Alex, age is 29."}
+  ]
+}
