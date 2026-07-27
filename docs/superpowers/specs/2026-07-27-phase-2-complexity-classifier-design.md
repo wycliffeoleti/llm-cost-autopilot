@@ -83,6 +83,30 @@ label is a manual judgment call, not generated from a template or assigned
 by construction. Target balance: ~70 examples per tier, so the held-out
 confusion matrix is interpretable without majority-class artifacts.
 
+**Provenance constraint (blocking, unresolved as of this revision):**
+"hand-authored"/"hand-labeled" is a claim about who produced the data — a
+human — not merely about writing style. The assistant must not generate
+dataset content, individually composed or otherwise, and commit or describe
+it as hand-authored human ground truth; that would misrepresent the
+dataset's provenance, which matters both for the classifier's accuracy
+claims and for the project's portfolio narrative. This phase's
+implementation plan must resolve authorship through one of:
+
+- **(a) AI-assisted draft, explicitly gated on human review** — the
+  assistant may draft candidate examples, but they are stored/labeled as an
+  unreviewed AI-assisted draft and must not be treated as golden/labeled
+  ground truth (e.g. used in accuracy claims or committed as the production
+  `data/complexity_dataset.json`) until the project owner has reviewed and
+  explicitly approved them.
+- **(b) Owner-input gate** — the assistant builds only the dataset schema,
+  loader, and validation/splitting infrastructure; the actual 210+ examples
+  are supplied by the project owner directly, and no classifier training
+  proceeds until that data exists.
+
+No dataset content has been committed under either path yet. This choice is
+pending project-owner decision and gates the classifier/routing tasks in the
+implementation plan.
+
 **Storage** (`data/complexity_dataset.json`), matching the Phase 1
 `evals/prompts/phase1_baseline.json` convention:
 
@@ -234,3 +258,7 @@ dependencies = ["scikit-learn>=1.4,<2", "numpy>=1.26,<2", "pyyaml>=6.0,<7"]
 - This document does not claim Phase 2 code, dataset, or dependency
   installation exists yet. It is a design record only, to be followed by an
   implementation plan.
+- No dataset content has been generated or committed. Section 4's provenance
+  constraint (AI-assisted draft with a human-review gate, vs. an
+  owner-input gate) is unresolved and blocks the implementation plan's
+  dataset task until the project owner decides between the two paths.
