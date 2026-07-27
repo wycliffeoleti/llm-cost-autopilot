@@ -2,6 +2,7 @@ from costpilot.features import token_count, instruction_verb_count
 from costpilot.features import constraint_count
 from costpilot.features import has_context
 from costpilot.features import output_format_complexity
+from costpilot.features import FEATURE_KEYS, extract_features
 
 
 def test_token_count_counts_whitespace_separated_words():
@@ -60,3 +61,13 @@ def test_output_format_complexity_simple_for_list_request():
 
 def test_output_format_complexity_zero_for_free_text():
     assert output_format_complexity("What is the capital of France?") == 0
+
+
+def test_extract_features_returns_all_five_keys():
+    features = extract_features("Analyze and compare this data.")
+    assert set(features.keys()) == set(FEATURE_KEYS)
+
+
+def test_extract_features_values_are_floats():
+    features = extract_features("Analyze and compare this data.")
+    assert all(isinstance(value, float) for value in features.values())

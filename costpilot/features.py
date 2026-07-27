@@ -63,3 +63,22 @@ def output_format_complexity(prompt: str) -> int:
     if _SIMPLE_FORMAT_PATTERN.search(prompt):
         return 1
     return 0
+
+
+FEATURE_KEYS = (
+    "token_count",
+    "instruction_verb_count",
+    "constraint_count",
+    "has_context",
+    "output_format_complexity",
+)
+
+
+def extract_features(prompt: str) -> dict[str, float]:
+    return {
+        "token_count": float(token_count(prompt)),
+        "instruction_verb_count": float(instruction_verb_count(prompt)),
+        "constraint_count": float(constraint_count(prompt)),
+        "has_context": float(has_context(prompt)),
+        "output_format_complexity": float(output_format_complexity(prompt)),
+    }
