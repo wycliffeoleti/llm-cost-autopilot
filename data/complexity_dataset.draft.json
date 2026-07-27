@@ -57,6 +57,20 @@
     {"id": "c053", "tier": "tier_1", "text": "What is the boiling point of water at sea level in Celsius?"},
     {"id": "c054", "tier": "tier_1", "text": "According to this excerpt, what caused the delay in the shipment? The shipment was delayed due to a customs inspection triggered by incomplete paperwork on the exporter's side."},
     {"id": "c055", "tier": "tier_1", "text": "Who wrote the novel Pride and Prejudice?"},
-    {"id": "c056", "tier": "tier_1", "text": "Based on this passage, how many employees does the company have? With just under 500 employees spread across three offices, the company has doubled in size since its last funding round."}
+    {"id": "c056", "tier": "tier_1", "text": "Based on this passage, how many employees does the company have? With just under 500 employees spread across three offices, the company has doubled in size since its last funding round."},
+    {"id": "c057", "tier": "tier_1", "text": "What is the chemical symbol for gold?"},
+    {"id": "c058", "tier": "tier_1", "text": "According to this bio, where did the author grow up? Born in rural Kenya, the author later moved to London to pursue a career in journalism."},
+    {"id": "c059", "tier": "tier_1", "text": "What is the largest planet in our solar system?"},
+    {"id": "c060", "tier": "tier_1", "text": "Based on this paragraph, what triggered the recall? The recall was issued after several units were found to have a faulty battery connector that posed a fire risk."},
+    {"id": "c061", "tier": "tier_1", "text": "Who is credited with inventing the telephone?"},
+    {"id": "c062", "tier": "tier_1", "text": "According to this schedule, what time does the last train depart? Trains run every 20 minutes until the last departure at 11:40 PM."},
+    {"id": "c063", "tier": "tier_1", "text": "What is the freezing point of water in Fahrenheit?"},
+    {"id": "c064", "tier": "tier_1", "text": "Based on this text, what was the main reason for the merger? The two companies merged primarily to combine their complementary technology stacks and expand into new markets together."},
+    {"id": "c065", "tier": "tier_1", "text": "How many continents are there on Earth?"},
+    {"id": "c066", "tier": "tier_1", "text": "According to this memo, who approved the budget increase? The revised budget was approved by the finance director following a review of Q3 spending."},
+    {"id": "c067", "tier": "tier_1", "text": "What year did World War II end?"},
+    {"id": "c068", "tier": "tier_1", "text": "Based on this passage, what is the warranty period for the product? The product comes with a standard one-year warranty covering manufacturing defects, extendable to three years for an additional fee."},
+    {"id": "c069", "tier": "tier_1", "text": "What is the currency used in Japan?"},
+    {"id": "c070", "tier": "tier_1", "text": "According to this note, why was the flight rescheduled? The flight was rescheduled due to a mechanical issue discovered during the pre-flight inspection."}
   ]
 }
