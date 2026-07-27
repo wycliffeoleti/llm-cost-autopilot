@@ -1438,15 +1438,13 @@ from sklearn.linear_model import LogisticRegression
 from costpilot.features import FEATURE_KEYS, extract_features
 
 
-def _feature_matrix(examples: list[LabeledExample]) -> np.ndarray:
-    rows = [
-        [extract_features(example.text)[key] for key in FEATURE_KEYS] for example in examples
-    ]
+def _feature_matrix(texts: list[str]) -> np.ndarray:
+    rows = [[extract_features(text)[key] for key in FEATURE_KEYS] for text in texts]
     return np.array(rows, dtype=float)
 
 
 def train_classifier(train_examples: list[LabeledExample], seed: int = RANDOM_SEED) -> LogisticRegression:
-    X = _feature_matrix(train_examples)
+    X = _feature_matrix([example.text for example in train_examples])
     y = [example.tier for example in train_examples]
     model = LogisticRegression(max_iter=1000, random_state=seed)
     model.fit(X, y)
@@ -1517,7 +1515,7 @@ class EvaluationResult:
 
 
 def evaluate(model: LogisticRegression, test_examples: list[LabeledExample]) -> EvaluationResult:
-    X = _feature_matrix(test_examples)
+    X = _feature_matrix([example.text for example in test_examples])
     y_true = [example.tier for example in test_examples]
     y_pred = model.predict(X)
     accuracy = float(model.score(X, y_true))
@@ -1549,7 +1547,7 @@ not a real-world routing-quality claim."
 - Modify: `tests/test_classifier.py`
 
 **Interfaces:**
-- Consumes: `_feature_matrix`, `FEATURE_KEYS`, `extract_features` (Tasks 26, 7)
+- Consumes: `_feature_matrix` (Task 26, now `list[str] -> np.ndarray`)
 - Produces: `predict_tier(prompt: str, model: LogisticRegression) -> str` — this is what `costpilot/routing.py` (Task 31) imports.
 
 - [ ] **Step 1: Write the failing test**
@@ -1585,8 +1583,7 @@ Expected: FAIL with `ImportError: cannot import name 'predict_tier'`.
 Add to `costpilot/classifier.py`:
 ```python
 def predict_tier(prompt: str, model: LogisticRegression) -> str:
-    features = extract_features(prompt)
-    X = np.array([[features[key] for key in FEATURE_KEYS]], dtype=float)
+    X = _feature_matrix([prompt])
     return str(model.predict(X)[0])
 ```
 
