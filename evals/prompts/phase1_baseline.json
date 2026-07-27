@@ -1,0 +1,45 @@
+{
+  "version": "1.0",
+  "prompts": [
+    {
+      "id": "p01",
+      "text": "Summarize the following paragraph in one sentence: The quarterly report showed a 12% increase in revenue driven primarily by the new subscription tier, while operating costs remained flat year over year."
+    },
+    {
+      "id": "p02",
+      "text": "Extract the shipping address from this text: John Smith, 42 Baker Street, London, NW1 6XE, United Kingdom."
+    },
+    {
+      "id": "p03",
+      "text": "What is the capital of France?"
+    },
+    {
+      "id": "p04",
+      "text": "Classify the sentiment of this review as positive, negative, or neutral: The product arrived on time but the packaging was damaged."
+    },
+    {
+      "id": "p05",
+      "text": "Reformat this list into alphabetical order: banana, apple, cherry, date."
+    },
+    {
+      "id": "p06",
+      "text": "Compare the tradeoffs between REST and GraphQL APIs for a mobile application with limited bandwidth."
+    },
+    {
+      "id": "p07",
+      "text": "Analyze the following error log and identify the most likely root cause: ConnectionResetError, Errno 104, Connection reset by peer, occurring every 30 seconds under load."
+    },
+    {
+      "id": "p08",
+      "text": "Write a short, professional email declining a meeting invitation due to a scheduling conflict."
+    },
+    {
+      "id": "p09",
+      "text": "Given the constraints that the output must be valid JSON, include exactly three fields (name, age, city), and the age must be an integer, generate a sample record for a person named Priya in Berlin."
+    },
+    {
+      "id": "p10",
+      "text": "Critique the following product pitch for logical inconsistencies and suggest one concrete improvement: Our app is the fastest on the market, though we haven't benchmarked it against competitors, and users love it based on the two reviews we've received."
+    }
+  ]
+}
