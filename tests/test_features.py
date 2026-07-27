@@ -1,4 +1,5 @@
 from costpilot.features import token_count, instruction_verb_count
+from costpilot.features import constraint_count
 
 
 def test_token_count_counts_whitespace_separated_words():
@@ -19,3 +20,15 @@ def test_instruction_verb_count_is_case_insensitive():
 
 def test_instruction_verb_count_returns_zero_for_plain_question():
     assert instruction_verb_count("What is the capital of France?") == 0
+
+
+def test_constraint_count_counts_constraint_keywords():
+    assert constraint_count("You must include at least three examples.") == 2
+
+
+def test_constraint_count_counts_bulleted_lines():
+    assert constraint_count("- one\n- two\n- three") == 3
+
+
+def test_constraint_count_returns_zero_for_plain_question():
+    assert constraint_count("What is the capital of France?") == 0

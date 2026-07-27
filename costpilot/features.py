@@ -15,3 +15,24 @@ def token_count(prompt: str) -> int:
 
 def instruction_verb_count(prompt: str) -> int:
     return len(_INSTRUCTION_VERB_PATTERN.findall(prompt))
+
+
+_CONSTRAINT_PATTERNS = (
+    r"\bmust\b",
+    r"\bshould\b",
+    r"\bdo not\b",
+    r"\bdon't\b",
+    r"\bat least\b",
+    r"\bexactly\b",
+    r"\bno more than\b",
+    r"\bbetween\s+\d+\s+and\s+\d+\b",
+    r"^\s*[-*]\s+\S.*$",
+    r"^\s*\d+[.)]\s+\S.*$",
+)
+_CONSTRAINT_REGEXES = [
+    re.compile(pattern, re.IGNORECASE | re.MULTILINE) for pattern in _CONSTRAINT_PATTERNS
+]
+
+
+def constraint_count(prompt: str) -> int:
+    return sum(len(regex.findall(prompt)) for regex in _CONSTRAINT_REGEXES)
