@@ -43,6 +43,20 @@
     {"id": "c039", "tier": "tier_1", "text": "Extract the discount percentage from this promo text: Use code SAVE20 for 20% off your next order through Friday."},
     {"id": "c040", "tier": "tier_1", "text": "Find the error code in this log line: ERROR 503 Service Unavailable, upstream connection refused."},
     {"id": "c041", "tier": "tier_1", "text": "Extract the checkout time from this hotel confirmation: Check-in 3:00 PM, Check-out 11:00 AM, Room type Deluxe King."},
-    {"id": "c042", "tier": "tier_1", "text": "Pull the license plate number from this text: The reported vehicle had license plate number 7XKT204."}
+    {"id": "c042", "tier": "tier_1", "text": "Pull the license plate number from this text: The reported vehicle had license plate number 7XKT204."},
+    {"id": "c043", "tier": "tier_1", "text": "Extract the interest rate from this loan summary: Loan amount $15,000, APR 6.25%, Term 60 months."},
+    {"id": "c044", "tier": "tier_1", "text": "Find the tracking number in this shipping notification: Your package has shipped via UPS, tracking number 1Z999AA10123456784."},
+    {"id": "c045", "tier": "tier_1", "text": "Extract the job title from this profile snippet: Maria Chen, Senior Data Engineer at Northwind Analytics."},
+    {"id": "c046", "tier": "tier_1", "text": "Pull the currency code from this transaction record: Amount 250.00 EUR, Merchant Cafe Lumiere, Date 2026-02-14."},
+    {"id": "c047", "tier": "tier_1", "text": "Extract the room number from this hotel note: Guest has been assigned to Room 412 on the fourth floor."},
+    {"id": "c048", "tier": "tier_1", "text": "What is the capital of Japan?"},
+    {"id": "c049", "tier": "tier_1", "text": "Based on this paragraph, what year did the company relocate its headquarters? Founded in 1998, the company grew steadily and relocated its headquarters to Austin in 2015 to be closer to its engineering talent pool."},
+    {"id": "c050", "tier": "tier_1", "text": "According to this text, who is the CEO of the company? Northwind Robotics, led by CEO David Okafor since 2020, specializes in warehouse automation."},
+    {"id": "c051", "tier": "tier_1", "text": "How many legs does a spider have?"},
+    {"id": "c052", "tier": "tier_1", "text": "Based on this weather report, will it rain tomorrow? Tomorrow's forecast shows a 70 percent chance of rain with highs near 60F and gusty winds in the afternoon."},
+    {"id": "c053", "tier": "tier_1", "text": "What is the boiling point of water at sea level in Celsius?"},
+    {"id": "c054", "tier": "tier_1", "text": "According to this excerpt, what caused the delay in the shipment? The shipment was delayed due to a customs inspection triggered by incomplete paperwork on the exporter's side."},
+    {"id": "c055", "tier": "tier_1", "text": "Who wrote the novel Pride and Prejudice?"},
+    {"id": "c056", "tier": "tier_1", "text": "Based on this passage, how many employees does the company have? With just under 500 employees spread across three offices, the company has doubled in size since its last funding round."}
   ]
 }
