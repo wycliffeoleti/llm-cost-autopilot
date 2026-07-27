@@ -32,3 +32,20 @@ def test_constraint_count_counts_bulleted_lines():
 
 def test_constraint_count_returns_zero_for_plain_question():
     assert constraint_count("What is the capital of France?") == 0
+
+
+from costpilot.features import has_context
+
+
+def test_has_context_true_for_colon_delimited_data_block():
+    prompt = "Extract the total from this invoice: Subtotal $10, Tax $1, Total $11."
+    assert has_context(prompt) is True
+
+
+def test_has_context_true_for_the_following_cue():
+    prompt = "Summarize the following report and highlight the key risks it describes in detail."
+    assert has_context(prompt) is True
+
+
+def test_has_context_false_for_plain_question():
+    assert has_context("What is the capital of France?") is False

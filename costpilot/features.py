@@ -36,3 +36,18 @@ _CONSTRAINT_REGEXES = [
 
 def constraint_count(prompt: str) -> int:
     return sum(len(regex.findall(prompt)) for regex in _CONSTRAINT_REGEXES)
+
+
+_CONTEXT_CUE_PATTERN = re.compile(
+    r"\bthe following\b|\bgiven this\b|\bbased on this\b|\baccording to this\b",
+    re.IGNORECASE,
+)
+
+
+def has_context(prompt: str) -> bool:
+    if _CONTEXT_CUE_PATTERN.search(prompt):
+        return True
+    if ":" in prompt:
+        trailing = prompt.split(":", 1)[1].strip()
+        return len(trailing.split()) >= 5
+    return False
