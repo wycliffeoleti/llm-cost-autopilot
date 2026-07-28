@@ -240,6 +240,30 @@ def test_store_rejects_forged_verification_cost_delta_before_sqlite_insertion(tm
     assert store.read_all() == []
 
 
+def test_store_rejects_boolean_verification_cost_delta_before_sqlite_insertion(tmp_path):
+    store = SQLiteAuditStore(tmp_path / "audit.sqlite3")
+    request = Request(prompt="zero delta", request_id="forged-boolean-delta")
+    provider = FakeProvider()
+    routed = provider.send(request, FAKE_MODELS["gpt-4o"])
+    reference = provider.send(request, FAKE_MODELS["gpt-4o"])
+    verification = replace(
+        verify_response(request, routed, FAKE_MODELS["gpt-4o"], provider, threshold=1.0),
+        escalation_cost_delta_usd=False,
+    )
+
+    with pytest.raises((TypeError, ValueError), match="cost delta"):
+        store.append(
+            datetime(2026, 7, 28, tzinfo=UTC),
+            request,
+            "tier_3",
+            routed,
+            verification=verification,
+            verification_response=reference,
+        )
+
+    assert store.read_all() == []
+
+
 def test_store_reads_events_in_timestamp_then_insertion_order_and_never_leaks_prompt_or_output(tmp_path):
     database = tmp_path / "audit.sqlite3"
     store = SQLiteAuditStore(database)

@@ -233,8 +233,12 @@ class AuditEvent:
                 != verification_cost
             ):
                 raise ValueError("Audit verification provenance does not match the simulated responses")
-            if verification.escalation_cost_delta_usd != (
-                verification.reference_cost_usd - verification.original_cost_usd
+            if (
+                isinstance(verification.escalation_cost_delta_usd, bool)
+                or not isinstance(verification.escalation_cost_delta_usd, (int, float))
+                or not math.isfinite(verification.escalation_cost_delta_usd)
+                or verification.escalation_cost_delta_usd
+                != verification.reference_cost_usd - verification.original_cost_usd
             ):
                 raise ValueError("Audit verification escalation cost delta does not match its costs")
             if FAKE_MODELS[verification_response.model_id].quality_tier != "high":
