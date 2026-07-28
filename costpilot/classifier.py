@@ -4,7 +4,11 @@ import json
 from dataclasses import dataclass
 from pathlib import Path
 
+import numpy as np
+from sklearn.linear_model import LogisticRegression
 from sklearn.model_selection import train_test_split
+
+from costpilot.features import FEATURE_KEYS, extract_features
 
 TIER_LABELS = ("tier_1", "tier_2", "tier_3")
 RANDOM_SEED = 42
@@ -51,3 +55,18 @@ def train_test_split_dataset(
         stratify=labels,
     )
     return list(train), list(test)
+
+
+def _feature_matrix(texts: list[str]) -> np.ndarray:
+    rows = [[extract_features(text)[key] for key in FEATURE_KEYS] for text in texts]
+    return np.array(rows, dtype=float)
+
+
+def train_classifier(
+    train_examples: list[LabeledExample], seed: int = RANDOM_SEED
+) -> LogisticRegression:
+    features = _feature_matrix([example.text for example in train_examples])
+    labels = [example.tier for example in train_examples]
+    model = LogisticRegression(max_iter=1000, random_state=seed)
+    model.fit(features, labels)
+    return model

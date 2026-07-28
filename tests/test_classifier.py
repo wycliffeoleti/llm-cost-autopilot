@@ -2,7 +2,13 @@ from pathlib import Path
 
 import pytest
 
-from costpilot.classifier import load_dataset, train_test_split_dataset
+from sklearn.linear_model import LogisticRegression
+
+from costpilot.classifier import (
+    load_dataset,
+    train_classifier,
+    train_test_split_dataset,
+)
 
 DATASET_PATH = Path(__file__).parent.parent / "data" / "complexity_dataset.draft.json"
 
@@ -58,3 +64,11 @@ def test_train_test_split_is_stratified_across_tiers():
     dataset = load_dataset(DATASET_PATH)
     _, test = train_test_split_dataset(dataset)
     assert {example.tier for example in test} == {"tier_1", "tier_2", "tier_3"}
+
+
+def test_train_classifier_returns_a_fitted_logistic_regression():
+    dataset = load_dataset(DATASET_PATH)
+    train, _ = train_test_split_dataset(dataset)
+    model = train_classifier(train)
+    assert isinstance(model, LogisticRegression)
+    assert set(model.classes_) == {"tier_1", "tier_2", "tier_3"}
