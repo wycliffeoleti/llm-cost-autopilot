@@ -60,6 +60,22 @@ def test_completion_creates_one_audit_lifecycle_and_returns_simulated_metadata(c
     assert client.get("/v1/stats").json()["stats"]["event_count"] == 1
 
 
+def test_completion_uses_exact_per_invocation_microdollars_for_trailing_space_prompt(
+    client: TestClient,
+):
+    response = client.post(
+        "/v1/completions",
+        json={"prompt": "word word ", "request_id": "rounding-regression"},
+    )
+
+    assert response.status_code == 201
+    payload = response.json()
+    assert payload["routed_cost_microusd"] == 7
+    assert payload["verification_cost_microusd"] == 48
+    assert payload["rerun_cost_microusd"] == 48
+    assert payload["lifecycle_cost_microusd"] == 103
+
+
 def test_failed_verification_explicitly_reruns_reference_model(client: TestClient):
     response = client.post(
         "/v1/completions",

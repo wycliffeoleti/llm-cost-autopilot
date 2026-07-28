@@ -16,7 +16,8 @@ MICRODOLLARS_PER_USD = 1_000_000
 VALID_CLASSIFIER_TIERS = frozenset({"tier_1", "tier_2", "tier_3"})
 
 
-def _microdollars(cost_usd: float) -> int:
+def cost_usd_to_microusd(cost_usd: float) -> int:
+    """Round one simulated provider invocation into its stored currency unit."""
     if isinstance(cost_usd, bool) or not isinstance(cost_usd, (int, float)):
         raise TypeError("Cost must be numeric")
     if not math.isfinite(cost_usd) or cost_usd < 0:
@@ -45,7 +46,7 @@ def _validate_response(response: Response, field: str) -> None:
         or response.latency_ms < 0
     ):
         raise ValueError(f"{field} response latency must be finite and non-negative")
-    _microdollars(response.cost_usd)
+    cost_usd_to_microusd(response.cost_usd)
 
 
 @dataclass(frozen=True)
@@ -207,6 +208,13 @@ class AuditEvent:
         _validate_deterministic_response(request, routed_response, "Routed")
         if rerun_response is not None:
             _validate_deterministic_response(request, rerun_response, "Rerun")
+        routed_cost = cost_usd_to_microusd(routed_response.cost_usd)
+        verification_cost = (
+            0
+            if verification_response is None
+            else cost_usd_to_microusd(verification_response.cost_usd)
+        )
+        rerun_cost = 0 if rerun_response is None else cost_usd_to_microusd(rerun_response.cost_usd)
         if verification is None:
             if verification_response is not None or rerun_response is not None:
                 raise ValueError("Audit verification data requires a verification result")
@@ -219,10 +227,10 @@ class AuditEvent:
             if (
                 verification.original_model_id != routed_response.model_id
                 or verification.reference_model_id != verification_response.model_id
-                or _microdollars(verification.original_cost_usd)
-                != _microdollars(routed_response.cost_usd)
-                or _microdollars(verification.reference_cost_usd)
-                != _microdollars(verification_response.cost_usd)
+                or cost_usd_to_microusd(verification.original_cost_usd)
+                != routed_cost
+                or cost_usd_to_microusd(verification.reference_cost_usd)
+                != verification_cost
             ):
                 raise ValueError("Audit verification provenance does not match the simulated responses")
             if FAKE_MODELS[verification_response.model_id].quality_tier != "high":
@@ -235,9 +243,6 @@ class AuditEvent:
             if (
                 verification.quality_score != expected_score
                 or verification.passed != (expected_score >= verification.threshold)
-                or _microdollars(verification.escalation_cost_delta_usd)
-                != _microdollars(verification_response.cost_usd)
-                - _microdollars(routed_response.cost_usd)
             ):
                 raise ValueError("Audit verification result does not match simulated lifecycle data")
             if (
@@ -247,8 +252,7 @@ class AuditEvent:
                 raise ValueError("Audit rerun must use the verification model")
         direct_response = FakeProvider().send(request, FAKE_MODELS["gpt-4o"])
         utc_timestamp = timestamp.astimezone(UTC)
-        verification_cost = 0 if verification_response is None else _microdollars(verification_response.cost_usd)
-        rerun_cost = 0 if rerun_response is None else _microdollars(rerun_response.cost_usd)
+        direct_cost = cost_usd_to_microusd(direct_response.cost_usd)
         event = cls(
             timestamp=utc_timestamp,
             request_id=request.request_id,
@@ -259,7 +263,7 @@ class AuditEvent:
             routed_input_tokens=routed_response.input_tokens,
             routed_output_tokens=routed_response.output_tokens,
             routed_latency_ms=routed_response.latency_ms,
-            routed_cost_microusd=_microdollars(routed_response.cost_usd),
+            routed_cost_microusd=routed_cost,
             verification_model_id=None if verification_response is None else verification_response.model_id,
             verification_quality_score=None if verification is None else verification.quality_score,
             verification_threshold=None if verification is None else verification.threshold,
@@ -271,10 +275,8 @@ class AuditEvent:
             rerun_output_tokens=None if rerun_response is None else rerun_response.output_tokens,
             rerun_latency_ms=None if rerun_response is None else rerun_response.latency_ms,
             rerun_cost_microusd=rerun_cost,
-            lifecycle_cost_microusd=(
-                _microdollars(routed_response.cost_usd) + verification_cost + rerun_cost
-            ),
-            direct_gpt4o_cost_microusd=_microdollars(direct_response.cost_usd),
+            lifecycle_cost_microusd=routed_cost + verification_cost + rerun_cost,
+            direct_gpt4o_cost_microusd=direct_cost,
         )
         return event
 

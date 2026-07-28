@@ -95,6 +95,15 @@ def test_event_from_lifecycle_hashes_prompt_and_accounts_for_full_lifecycle():
     assert event.direct_gpt4o_cost_microusd > 0
 
 
+def test_event_uses_exact_per_invocation_microdollars_for_trailing_space_prompt():
+    event = _event(prompt="word word ", verification=True)
+
+    assert event.routed_cost_microusd == 7
+    assert event.verification_cost_microusd == 48
+    assert event.rerun_cost_microusd == 0
+    assert event.lifecycle_cost_microusd == 55
+
+
 def test_event_accounts_for_an_actual_phase_2_to_phase_3_simulated_flow():
     request = Request(prompt="What is the capital of Germany?", request_id="phase-2-3")
     provider = FakeProvider()

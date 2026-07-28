@@ -14,6 +14,7 @@ from fastapi.exceptions import RequestValidationError
 from fastapi.responses import JSONResponse
 from pydantic import BaseModel, ConfigDict, Field, field_validator
 
+from costpilot.audit import cost_usd_to_microusd
 from costpilot.service import Completion, OfflineService
 
 MAX_PROMPT_CHARS = 12_000
@@ -51,6 +52,13 @@ class CompletionRequest(BaseModel):
 
 
 def _completion_payload(completion: Completion, provenance: dict[str, object]) -> dict[str, object]:
+    routed_cost = cost_usd_to_microusd(completion.routed_response.cost_usd)
+    verification_cost = cost_usd_to_microusd(completion.verification_response.cost_usd)
+    rerun_cost = (
+        0
+        if completion.rerun_response is None
+        else cost_usd_to_microusd(completion.rerun_response.cost_usd)
+    )
     return {
         "request_id": completion.request_id,
         "output_text": completion.output_text,
@@ -58,27 +66,16 @@ def _completion_payload(completion: Completion, provenance: dict[str, object]) -
         "routed_model_id": completion.routed_response.model_id,
         "routed_input_tokens": completion.routed_response.input_tokens,
         "routed_output_tokens": completion.routed_response.output_tokens,
-        "routed_cost_microusd": round(completion.routed_response.cost_usd * 1_000_000),
+        "routed_cost_microusd": routed_cost,
         "verification_model_id": completion.verification_response.model_id,
         "verification_score": completion.verification_score,
         "verification_threshold": completion.verification_threshold,
         "verification_passed": completion.verification_passed,
-        "verification_cost_microusd": round(
-            completion.verification_response.cost_usd * 1_000_000
-        ),
+        "verification_cost_microusd": verification_cost,
         "escalated": completion.escalated,
         "rerun_model_id": None if completion.rerun_response is None else completion.rerun_response.model_id,
-        "rerun_cost_microusd": 0
-        if completion.rerun_response is None
-        else round(completion.rerun_response.cost_usd * 1_000_000),
-        "lifecycle_cost_microusd": round(
-            (
-                completion.routed_response.cost_usd
-                + completion.verification_response.cost_usd
-                + (0 if completion.rerun_response is None else completion.rerun_response.cost_usd)
-            )
-            * 1_000_000
-        ),
+        "rerun_cost_microusd": rerun_cost,
+        "lifecycle_cost_microusd": routed_cost + verification_cost + rerun_cost,
         "provenance": provenance,
     }
 
