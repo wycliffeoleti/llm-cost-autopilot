@@ -5,7 +5,7 @@ build-backend = "setuptools.build_meta"
 [project]
 name = "llm-cost-autopilot"
 version = "0.1.0"
-description = "BASWE Project 2 - LLM Cost Autopilot (Phase 1: unified model interface)"
+description = "BASWE Project 2 - offline LLM complexity classification and cost routing"
 requires-python = ">=3.11"
 dependencies = ["scikit-learn>=1.4,<2", "numpy>=1.26,<2", "pyyaml>=6.0,<7"]
 

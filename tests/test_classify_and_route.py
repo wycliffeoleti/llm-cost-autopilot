@@ -22,3 +22,11 @@ def test_classify_and_route_end_to_end_per_tier():
         "three trade-offs, and recommend one with justification."
     )
     assert classify_and_route(complex_prompt, model, config) == FAKE_MODELS["gpt-4o"]
+
+    moderate_prompt = (
+        "Analyze this sales data and identify the top three trends: Q1 sales, "
+        "Electronics $130K, Apparel $80K, Home Goods $65K. Q2 sales, Electronics "
+        "$100K, Apparel $115K, Home Goods $75K. Q3 sales, Electronics $140K, "
+        "Apparel $105K, Home Goods $60K."
+    )
+    assert classify_and_route(moderate_prompt, model, config) == FAKE_MODELS["gpt-4o-mini"]
