@@ -100,7 +100,11 @@ def render_text_report(report: AuditReport) -> str:
     return "\n".join(lines) + "\n"
 
 
-def render_html_report(report: AuditReport, title: str = "Offline Audit Dashboard") -> str:
+def render_html_report(
+    report: AuditReport,
+    title: str = "Offline Audit Dashboard",
+    additional_disclaimer: str | None = None,
+) -> str:
     """Render a self-contained report with escaped text and no remote assets."""
     sections = "".join(
         (
@@ -132,6 +136,11 @@ def render_html_report(report: AuditReport, title: str = "Offline Audit Dashboar
     )
     escaped_title = escape(title)
     banner = escape(OFFLINE_BANNER)
+    additional_banner = (
+        f'<p class="banner">{escape(additional_disclaimer)}</p>'
+        if additional_disclaimer is not None
+        else ""
+    )
     return f"""<!doctype html>
 <html lang="en">
 <head>
@@ -152,6 +161,7 @@ td:last-child {{ text-align: right; }} footer {{ margin-top: 1rem; }}
 <body><main>
 <h1>{escaped_title}</h1>
 <p class="banner">{banner}</p>
+{additional_banner}
 <section><h2>Simulated lifecycle summary</h2><dl>{metric_html}</dl></section>
 {sections}
 <footer class="banner">{banner}</footer>

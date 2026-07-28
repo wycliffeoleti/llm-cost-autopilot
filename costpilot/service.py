@@ -82,7 +82,11 @@ class OfflineService:
         self._store = SQLiteAuditStore(audit_database_path)
 
     def complete(
-        self, prompt: str, request_id: str, verification_threshold: float | None = None
+        self,
+        prompt: str,
+        request_id: str,
+        verification_threshold: float | None = None,
+        timestamp: datetime | None = None,
     ) -> Completion:
         threshold = self._verification_config.default_threshold
         if verification_threshold is not None:
@@ -109,7 +113,7 @@ class OfflineService:
             else None
         )
         self._store.append(
-            datetime.now(UTC),
+            datetime.now(UTC) if timestamp is None else timestamp,
             request,
             classifier_tier,
             routed_response,
