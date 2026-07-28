@@ -5,6 +5,7 @@ from dataclasses import dataclass
 from pathlib import Path
 
 import numpy as np
+from numpy.typing import NDArray
 from sklearn.linear_model import LogisticRegression
 from sklearn.metrics import confusion_matrix
 from sklearn.model_selection import train_test_split
@@ -58,7 +59,7 @@ def train_test_split_dataset(
     return list(train), list(test)
 
 
-def _feature_matrix(texts: list[str]) -> np.ndarray:
+def _feature_matrix(texts: list[str]) -> NDArray[np.float64]:
     rows = [[extract_features(text)[key] for key in FEATURE_KEYS] for text in texts]
     return np.array(rows, dtype=float)
 
@@ -88,3 +89,7 @@ def evaluate(
     accuracy = float(model.score(features, labels))
     confusion = confusion_matrix(labels, predictions, labels=list(TIER_LABELS))
     return EvaluationResult(accuracy=accuracy, confusion=confusion.tolist())
+
+
+def predict_tier(prompt: str, model: LogisticRegression) -> str:
+    return str(model.predict(_feature_matrix([prompt]))[0])

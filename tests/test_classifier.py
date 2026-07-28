@@ -7,6 +7,7 @@ from sklearn.linear_model import LogisticRegression
 from costpilot.classifier import (
     evaluate,
     load_dataset,
+    predict_tier,
     train_classifier,
     train_test_split_dataset,
 )
@@ -85,3 +86,19 @@ def test_prototype_held_out_accuracy_on_draft_dataset():
     assert result.accuracy >= 0.80
     assert len(result.confusion) == 3
     assert all(len(row) == 3 for row in result.confusion)
+
+
+def test_predict_tier_classifies_a_simple_novel_prompt_as_tier_1():
+    dataset = load_dataset(DATASET_PATH)
+    model = train_classifier(dataset.examples)
+    assert predict_tier("What is the capital of Germany?", model) == "tier_1"
+
+
+def test_predict_tier_classifies_a_complex_novel_prompt_as_tier_3():
+    dataset = load_dataset(DATASET_PATH)
+    model = train_classifier(dataset.examples)
+    prompt = (
+        "Analyze and compare these two hiring strategies, considering at least "
+        "three trade-offs, and recommend one with justification."
+    )
+    assert predict_tier(prompt, model) == "tier_3"
