@@ -1,7 +1,7 @@
 from __future__ import annotations
 
 import sqlite3
-from dataclasses import fields, replace
+from dataclasses import replace
 from datetime import UTC, datetime
 from pathlib import Path
 
@@ -65,6 +65,18 @@ def _event(
         verification_response=verification_response,
         rerun_response=rerun_response,
     )
+
+
+def _append_event(
+    store: SQLiteAuditStore,
+    *,
+    timestamp: datetime = datetime(2026, 7, 28, 10, 30, tzinfo=UTC),
+    request_id: str = "request-1",
+    prompt: str = "Sensitive prompt: do not persist this text.",
+) -> None:
+    request = Request(prompt=prompt, request_id=request_id)
+    routed = FakeProvider().send(request, FAKE_MODELS["claude-haiku"])
+    store.append(timestamp, request, "tier_1", routed)
 
 
 def test_event_from_lifecycle_hashes_prompt_and_accounts_for_full_lifecycle():
@@ -165,7 +177,7 @@ def test_event_rejects_response_injected_from_another_request(response_kind: str
         AuditEvent.from_lifecycle(datetime.now(UTC), request, "tier_1", **kwargs)
 
 
-def test_direct_events_require_exact_booleans_and_valid_verification_relationships(tmp_path):
+def test_direct_events_require_exact_booleans_and_valid_verification_relationships():
     event = _event(verification=True)
 
     with pytest.raises(ValueError, match="verification model must have high quality tier"):
@@ -179,23 +191,28 @@ def test_direct_events_require_exact_booleans_and_valid_verification_relationshi
     with pytest.raises(ValueError, match="verification cost must be positive"):
         replace(event, verification_cost_microusd=0)
 
-    direct_event = AuditEvent(
-        **{field.name: getattr(event, field.name) for field in fields(AuditEvent) if field.init}
-    )
-    with pytest.raises(ValueError, match="provenance-verified"):
-        SQLiteAuditStore(tmp_path / "audit.sqlite3").append(direct_event)
+
+
+def test_store_does_not_persist_a_caller_asserted_event_provenance(tmp_path):
+    store = SQLiteAuditStore(tmp_path / "audit.sqlite3")
+    forged_event = replace(_event())
+
+    # This reproduced the previous bypass: append trusted this mutable hidden flag
+    # even on an event recreated outside from_lifecycle.
+    object.__setattr__(forged_event, "_provenance_verified", True)
+
+    with pytest.raises(TypeError):
+        store.append(forged_event)  # type: ignore[call-arg]
+
+    assert store.read_all() == []
 
 
 def test_store_reads_events_in_timestamp_then_insertion_order_and_never_leaks_prompt_or_output(tmp_path):
     database = tmp_path / "audit.sqlite3"
     store = SQLiteAuditStore(database)
-    later = _event(timestamp=datetime(2026, 7, 29, tzinfo=UTC), request_id="later")
-    first = _event(timestamp=datetime(2026, 7, 28, tzinfo=UTC), request_id="first")
-    same_time = _event(timestamp=datetime(2026, 7, 28, tzinfo=UTC), request_id="same")
-
-    store.append(later)
-    store.append(first)
-    store.append(same_time)
+    _append_event(store, timestamp=datetime(2026, 7, 29, tzinfo=UTC), request_id="later")
+    _append_event(store, timestamp=datetime(2026, 7, 28, tzinfo=UTC), request_id="first")
+    _append_event(store, timestamp=datetime(2026, 7, 28, tzinfo=UTC), request_id="same")
 
     assert [event.request_id for event in store.read_all()] == ["first", "same", "later"]
     raw_database = database.read_bytes()
@@ -206,7 +223,7 @@ def test_store_reads_events_in_timestamp_then_insertion_order_and_never_leaks_pr
 def test_store_schema_rejects_updates_and_deletes(tmp_path):
     database = tmp_path / "audit.sqlite3"
     store = SQLiteAuditStore(database)
-    store.append(_event())
+    _append_event(store)
 
     with sqlite3.connect(database) as connection:
         with pytest.raises(sqlite3.DatabaseError, match="append-only"):
@@ -217,6 +234,6 @@ def test_store_schema_rejects_updates_and_deletes(tmp_path):
 
 def test_store_rejects_duplicate_request_lifecycle_ids(tmp_path):
     store = SQLiteAuditStore(tmp_path / "audit.sqlite3")
-    store.append(_event())
+    _append_event(store)
     with pytest.raises(ValueError, match="already exists"):
-        store.append(_event())
+        _append_event(store)

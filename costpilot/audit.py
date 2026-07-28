@@ -3,7 +3,7 @@ from __future__ import annotations
 import hashlib
 import math
 import sqlite3
-from dataclasses import dataclass, field
+from dataclasses import dataclass
 from datetime import UTC, datetime
 from pathlib import Path
 from typing import Any
@@ -80,8 +80,6 @@ class AuditEvent:
     rerun_cost_microusd: int
     lifecycle_cost_microusd: int
     direct_gpt4o_cost_microusd: int
-    _provenance_verified: bool = field(default=False, init=False, repr=False, compare=False)
-
     def __post_init__(self) -> None:
         offset = self.timestamp.utcoffset()
         if self.timestamp.tzinfo is None or offset is None:
@@ -278,7 +276,6 @@ class AuditEvent:
             ),
             direct_gpt4o_cost_microusd=_microdollars(direct_response.cost_usd),
         )
-        object.__setattr__(event, "_provenance_verified", True)
         return event
 
 
@@ -369,9 +366,32 @@ class SQLiteAuditStore:
                 """
             )
 
-    def append(self, event: AuditEvent) -> None:
-        if not event._provenance_verified:
-            raise ValueError("Audit events must be provenance-verified by from_lifecycle before persistence")
+    def append(
+        self,
+        timestamp: datetime,
+        request: Request,
+        classifier_tier: str,
+        routed_response: Response,
+        *,
+        verification: VerificationResult | None = None,
+        verification_response: Response | None = None,
+        rerun_response: Response | None = None,
+    ) -> None:
+        """Validate lifecycle inputs and persist the resulting audit event.
+
+        The store deliberately does not accept a caller-constructed ``AuditEvent``.
+        It establishes provenance by reconstructing the deterministic lifecycle
+        immediately before the insert.
+        """
+        event = AuditEvent.from_lifecycle(
+            timestamp,
+            request,
+            classifier_tier,
+            routed_response,
+            verification=verification,
+            verification_response=verification_response,
+            rerun_response=rerun_response,
+        )
         values = _event_values(event)
         try:
             with self._connect() as connection:
@@ -463,7 +483,7 @@ def _event_values(event: AuditEvent) -> dict[str, Any]:
 
 
 def _event_from_row(row: sqlite3.Row) -> AuditEvent:
-    event = AuditEvent(
+    return AuditEvent(
         timestamp=datetime.fromisoformat(str(row["timestamp"])),
         request_id=str(row["request_id"]),
         prompt_hash=str(row["prompt_hash"]),
@@ -488,8 +508,6 @@ def _event_from_row(row: sqlite3.Row) -> AuditEvent:
         lifecycle_cost_microusd=int(row["lifecycle_cost_microusd"]),
         direct_gpt4o_cost_microusd=int(row["direct_gpt4o_cost_microusd"]),
     )
-    object.__setattr__(event, "_provenance_verified", True)
-    return event
 
 
 def _optional_str(value: Any) -> str | None:

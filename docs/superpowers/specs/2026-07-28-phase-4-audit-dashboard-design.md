@@ -25,8 +25,9 @@ Create:
   provider, credential, or threshold configuration.
 
 One audit event represents one request lifecycle, not each provider invocation.
-Persistence is explicit (`store.append(event)`); neither `FakeProvider.send()`
-nor verification silently writes records.
+Persistence is explicit (`store.append(...)` with lifecycle inputs); neither
+`FakeProvider.send()` nor verification silently writes records. The store
+constructs and validates the event immediately before insertion.
 
 ## Event requirements
 

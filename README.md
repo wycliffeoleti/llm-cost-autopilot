@@ -35,8 +35,9 @@ fixed `FAKE_MODELS`, and the threshold must be finite and between `0.0` and
 Phase 4 records one explicit, append-only audit event per simulated request
 lifecycle. Events include only a SHA-256 prompt hash: raw prompts and model
 outputs are never persisted. Calling `FakeProvider.send()`, verification, or a
-rerun never writes an event; the caller explicitly constructs an
-`AuditEvent.from_lifecycle(...)` and calls `SQLiteAuditStore.append(event)`.
+rerun never writes an event; the caller explicitly calls
+`SQLiteAuditStore.append(...)` with the source lifecycle inputs; the store
+constructs and validates the audit event immediately before persistence.
 
 All simulated USD values are rounded to integer microdollars for each fake
 provider invocation before lifecycle totals are calculated. This stored-unit

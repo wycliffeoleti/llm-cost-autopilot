@@ -1,21 +1,21 @@
 from datetime import UTC, datetime
 
-from costpilot.audit import AuditEvent, SQLiteAuditStore
+from costpilot.audit import SQLiteAuditStore
 from costpilot.domain import Request
 from costpilot.providers.fake import FAKE_MODELS, FakeProvider
 from costpilot.reporting import build_report, render_html_report, render_text_report
 
 
-def _event(timestamp: datetime, request_id: str) -> AuditEvent:
+def _append_event(store: SQLiteAuditStore, timestamp: datetime, request_id: str) -> None:
     request = Request(prompt="<script>private prompt</script>", request_id=request_id)
     response = FakeProvider().send(request, FAKE_MODELS["claude-haiku"])
-    return AuditEvent.from_lifecycle(timestamp, request, "tier_1", response)
+    store.append(timestamp, request, "tier_1", response)
 
 
 def test_report_aggregates_utc_day_and_week_and_simulated_deltas(tmp_path):
     store = SQLiteAuditStore(tmp_path / "audit.sqlite3")
-    store.append(_event(datetime(2026, 7, 27, 23, 30, tzinfo=UTC), "one"))
-    store.append(_event(datetime(2026, 7, 28, 0, 30, tzinfo=UTC), "two"))
+    _append_event(store, datetime(2026, 7, 27, 23, 30, tzinfo=UTC), "one")
+    _append_event(store, datetime(2026, 7, 28, 0, 30, tzinfo=UTC), "two")
 
     report = build_report(store)
 
@@ -32,7 +32,7 @@ def test_report_aggregates_utc_day_and_week_and_simulated_deltas(tmp_path):
 
 def test_reports_are_deterministic_escaped_and_repeat_the_offline_banner(tmp_path):
     store = SQLiteAuditStore(tmp_path / "audit.sqlite3")
-    store.append(_event(datetime(2026, 7, 28, tzinfo=UTC), "<unsafe-id>"))
+    _append_event(store, datetime(2026, 7, 28, tzinfo=UTC), "<unsafe-id>")
     report = build_report(store)
 
     html_first = render_html_report(report, title="<Audit & report>")
