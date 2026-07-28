@@ -4,6 +4,8 @@ import json
 from dataclasses import dataclass
 from pathlib import Path
 
+from sklearn.model_selection import train_test_split
+
 TIER_LABELS = ("tier_1", "tier_2", "tier_3")
 RANDOM_SEED = 42
 
@@ -36,3 +38,16 @@ def load_dataset(path: Path) -> Dataset:
             LabeledExample(id=entry["id"], text=entry["text"], tier=entry["tier"])
         )
     return Dataset(status=status, examples=examples)
+
+
+def train_test_split_dataset(
+    dataset: Dataset, seed: int = RANDOM_SEED, test_size: float = 0.2
+) -> tuple[list[LabeledExample], list[LabeledExample]]:
+    labels = [example.tier for example in dataset.examples]
+    train, test = train_test_split(
+        dataset.examples,
+        test_size=test_size,
+        random_state=seed,
+        stratify=labels,
+    )
+    return list(train), list(test)
