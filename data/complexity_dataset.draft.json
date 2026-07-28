@@ -491,6 +491,76 @@
       "id": "c098",
       "tier": "tier_2",
       "text": "Classify this news headline by topic, choosing politics, sports, technology, or entertainment: Local council approves new zoning rules for downtown development."
+    },
+    {
+      "id": "c099",
+      "tier": "tier_2",
+      "text": "Categorize this tweet's sentiment as positive, negative, or neutral: Just tried the new update and honestly it's fine, nothing has really changed for me either way."
+    },
+    {
+      "id": "c100",
+      "tier": "tier_2",
+      "text": "Determine whether this transaction should be flagged as potentially fraudulent: A $2,400 purchase was made at 3 AM from a device location 900 miles from the cardholder's registered address, immediately followed by three smaller test transactions."
+    },
+    {
+      "id": "c101",
+      "tier": "tier_2",
+      "text": "Classify this job posting by seniority level, choosing junior, mid, senior, or staff: We're looking for someone with 8 plus years of experience to define our platform architecture and mentor a team of six engineers."
+    },
+    {
+      "id": "c102",
+      "tier": "tier_2",
+      "text": "Categorize this product return reason, choosing defective, wrong item, changed mind, or other: The item arrived with a cracked screen right out of the box."
+    },
+    {
+      "id": "c103",
+      "tier": "tier_2",
+      "text": "Determine the priority level of this incident report, choosing low, medium, high, or critical: Users are unable to log in to the production application, the issue is affecting all customers."
+    },
+    {
+      "id": "c104",
+      "tier": "tier_2",
+      "text": "Classify this restaurant review as a complaint about food, service, or ambiance: The waiter never came back to refill our drinks and it took 20 minutes to get the check."
+    },
+    {
+      "id": "c105",
+      "tier": "tier_2",
+      "text": "Categorize this loan application as approved, denied, or needs manual review: Applicant has a 610 credit score, stable income, but a recent 30-day late payment on an existing account."
+    },
+    {
+      "id": "c106",
+      "tier": "tier_2",
+      "text": "Determine whether this social media post violates the community guideline against harassment: Great points in the article, though I disagree with the third paragraph's conclusion."
+    },
+    {
+      "id": "c107",
+      "tier": "tier_2",
+      "text": "Classify this software bug report by severity, choosing cosmetic, minor, major, or blocker: The submit button is slightly misaligned on mobile screens smaller than 375 pixels wide."
+    },
+    {
+      "id": "c108",
+      "tier": "tier_2",
+      "text": "Categorize this email as urgent or non-urgent: Just a reminder that the team lunch has been moved to Friday at noon."
+    },
+    {
+      "id": "c109",
+      "tier": "tier_2",
+      "text": "Determine whether this expense report line item is reimbursable per typical corporate travel policy: Dinner for one at a mid-range restaurant during a business trip, $42 total."
+    },
+    {
+      "id": "c110",
+      "tier": "tier_2",
+      "text": "Classify this customer inquiry as a billing question, technical issue, or account request: I was charged twice for my subscription this month and need one of the charges reversed."
+    },
+    {
+      "id": "c111",
+      "tier": "tier_2",
+      "text": "Categorize this research paper's methodology as qualitative, quantitative, or mixed methods: The study surveyed 500 participants using a Likert-scale questionnaire and also conducted in-depth interviews with a subset of 20 respondents."
+    },
+    {
+      "id": "c112",
+      "tier": "tier_2",
+      "text": "Determine whether this online review appears to be genuine or likely fake: Best product ever, five stars, buy now, changed my life completely."
     }
   ]
 }
