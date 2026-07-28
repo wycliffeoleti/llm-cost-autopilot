@@ -8,7 +8,26 @@ An offline, deterministic prototype of an LLM cost-routing pipeline (BASWE Proje
 - **Phase 2 — complexity classifier and offline routing:** complete.
 - **Phase 3 — offline simulated verification and explicit escalation:** complete.
 - **Phase 4 — offline audit trail and static dashboard:** complete.
-- **Phases 5–6** (API, containerization): not started.
+- **Phase 5 — offline deterministic API:** complete.
+- **Phase 6** (containerization): not started.
+
+## Phase 5 — offline deterministic API
+
+The FastAPI interface is a loopback-only interface to the existing offline
+`FakeProvider` pipeline. It never uses credentials, live provider calls, or
+runtime model lookup. Run it only on the local loopback interface:
+
+```bash
+uv run uvicorn costpilot.api:app --host 127.0.0.1 --port 8000
+```
+
+`POST /v1/completions` accepts a bounded nonblank `prompt`, optional bounded
+`request_id`, and optional numeric `verification_threshold`. Every completion
+runs routing, fake verification, and an explicit fake-reference rerun on a
+failed verification before one audit lifecycle is inserted. `GET /healthz`,
+`/v1/models`, `/v1/stats`, and `/v1/config` expose only sanitized metadata and
+repeat the offline-deterministic provenance disclaimer. Prompt and output text
+remain out of audit storage, aggregate responses, errors, and logs.
 
 ## Phase 3 — simulated verification
 

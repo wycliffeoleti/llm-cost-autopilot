@@ -95,6 +95,15 @@ def test_event_from_lifecycle_hashes_prompt_and_accounts_for_full_lifecycle():
     assert event.direct_gpt4o_cost_microusd > 0
 
 
+def test_event_uses_exact_per_invocation_microdollars_for_trailing_space_prompt():
+    event = _event(prompt="word word ", verification=True)
+
+    assert event.routed_cost_microusd == 7
+    assert event.verification_cost_microusd == 48
+    assert event.rerun_cost_microusd == 0
+    assert event.lifecycle_cost_microusd == 55
+
+
 def test_event_accounts_for_an_actual_phase_2_to_phase_3_simulated_flow():
     request = Request(prompt="What is the capital of Germany?", request_id="phase-2-3")
     provider = FakeProvider()
@@ -203,6 +212,54 @@ def test_store_does_not_persist_a_caller_asserted_event_provenance(tmp_path):
 
     with pytest.raises(TypeError):
         store.append(forged_event)  # type: ignore[call-arg]
+
+    assert store.read_all() == []
+
+
+def test_store_rejects_forged_verification_cost_delta_before_sqlite_insertion(tmp_path):
+    store = SQLiteAuditStore(tmp_path / "audit.sqlite3")
+    request = Request(prompt="verify this response", request_id="forged-delta")
+    provider = FakeProvider()
+    routed = provider.send(request, FAKE_MODELS["claude-haiku"])
+    reference = provider.send(request, FAKE_MODELS["gpt-4o"])
+    verification = replace(
+        verify_response(request, routed, FAKE_MODELS["gpt-4o"], provider, threshold=1.0),
+        escalation_cost_delta_usd=1.0,
+    )
+
+    with pytest.raises(ValueError, match="cost delta"):
+        store.append(
+            datetime(2026, 7, 28, tzinfo=UTC),
+            request,
+            "tier_1",
+            routed,
+            verification=verification,
+            verification_response=reference,
+        )
+
+    assert store.read_all() == []
+
+
+def test_store_rejects_boolean_verification_cost_delta_before_sqlite_insertion(tmp_path):
+    store = SQLiteAuditStore(tmp_path / "audit.sqlite3")
+    request = Request(prompt="zero delta", request_id="forged-boolean-delta")
+    provider = FakeProvider()
+    routed = provider.send(request, FAKE_MODELS["gpt-4o"])
+    reference = provider.send(request, FAKE_MODELS["gpt-4o"])
+    verification = replace(
+        verify_response(request, routed, FAKE_MODELS["gpt-4o"], provider, threshold=1.0),
+        escalation_cost_delta_usd=False,
+    )
+
+    with pytest.raises((TypeError, ValueError), match="cost delta"):
+        store.append(
+            datetime(2026, 7, 28, tzinfo=UTC),
+            request,
+            "tier_3",
+            routed,
+            verification=verification,
+            verification_response=reference,
+        )
 
     assert store.read_all() == []
 
