@@ -421,6 +421,76 @@
       "id": "c084",
       "tier": "tier_2",
       "text": "Condense this policy document excerpt about expense reimbursement: Employees must submit itemized receipts for any expense over $25 within 30 days of the purchase, and reimbursements for travel booked outside the approved corporate travel portal require prior manager sign-off."
+    },
+    {
+      "id": "c085",
+      "tier": "tier_2",
+      "text": "Summarize the central argument of this opinion column: The author argues that remote work has not reduced overall productivity but has instead shifted where and when work gets done, and that companies mandating a full return to office are conflating visibility with output."
+    },
+    {
+      "id": "c086",
+      "tier": "tier_2",
+      "text": "Provide a brief summary of this software release notes excerpt for the support team: This release patches a security vulnerability in the authentication module, adds two-factor authentication support for enterprise accounts, and deprecates the legacy API endpoints scheduled for removal next quarter."
+    },
+    {
+      "id": "c087",
+      "tier": "tier_2",
+      "text": "Summarize this survey result paragraph in one sentence: Of the 1,200 respondents, 68 percent said they would recommend the product to a colleague, though satisfaction scores were notably lower among customers on the free tier compared to paid subscribers."
+    },
+    {
+      "id": "c088",
+      "tier": "tier_2",
+      "text": "Condense this history lecture excerpt into a short summary: The excerpt describes how the printing press, invented in the mid-15th century, dramatically lowered the cost of producing books and is widely credited with accelerating literacy rates and the spread of new ideas across Europe."
+    },
+    {
+      "id": "c089",
+      "tier": "tier_2",
+      "text": "Summarize this restaurant review in two sentences: The tasting menu was inventive and beautifully plated, though the pacing between courses was inconsistent, with a nearly 45-minute wait before dessert that left several tables visibly frustrated."
+    },
+    {
+      "id": "c090",
+      "tier": "tier_2",
+      "text": "Provide a plain-language summary of this insurance claim status update: Your claim has been reviewed and approved for partial coverage of the water damage repairs, with the remaining balance due to a pre-existing roof condition that falls outside the policy's coverage terms."
+    },
+    {
+      "id": "c091",
+      "tier": "tier_2",
+      "text": "Summarize this product recall announcement: The manufacturer is recalling approximately 40,000 units of the model X200 space heater after receiving reports of overheating during extended use, and is offering free replacement units to affected customers."
+    },
+    {
+      "id": "c092",
+      "tier": "tier_2",
+      "text": "Condense this internal memo about the office relocation: Starting next quarter, the downtown office will consolidate into the new building on Fifth Avenue, with parking passes reissued automatically and a phased moving schedule by department over three weeks."
+    },
+    {
+      "id": "c093",
+      "tier": "tier_2",
+      "text": "Summarize the key takeaway from this podcast episode description: In this episode, the hosts interview a former air traffic controller about decision-making under pressure, drawing parallels to how software teams handle high-stakes production incidents."
+    },
+    {
+      "id": "c094",
+      "tier": "tier_2",
+      "text": "Provide a short summary of this weather advisory: A winter storm warning is in effect from 6 PM tonight through noon tomorrow, with 8 to 14 inches of snow expected and localized power outages possible due to high winds."
+    },
+    {
+      "id": "c095",
+      "tier": "tier_2",
+      "text": "Classify this email as spam or not spam: Congratulations, you've been selected to receive a free gift card. Click here now to claim your prize before it expires."
+    },
+    {
+      "id": "c096",
+      "tier": "tier_2",
+      "text": "Categorize this customer review as positive, negative, or neutral: The product works exactly as described and arrived a day early. Nothing special, but it does the job."
+    },
+    {
+      "id": "c097",
+      "tier": "tier_2",
+      "text": "Determine whether this support ticket is a bug report, feature request, or general question: It would be great if the app let me export my data as a CSV file."
+    },
+    {
+      "id": "c098",
+      "tier": "tier_2",
+      "text": "Classify this news headline by topic, choosing politics, sports, technology, or entertainment: Local council approves new zoning rules for downtown development."
     }
   ]
 }
