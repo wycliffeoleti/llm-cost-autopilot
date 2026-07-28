@@ -2,6 +2,7 @@
 
 from __future__ import annotations
 
+import argparse
 import json
 from collections.abc import Iterator
 from dataclasses import dataclass
@@ -78,3 +79,16 @@ def run_seeded_demo(output_path: Path) -> AuditReport:
         encoding="utf-8",
     )
     return report
+
+
+def main(arguments: list[str] | None = None) -> int:
+    """Generate a local aggregate-only report without any provider or network call."""
+    parser = argparse.ArgumentParser(description="Generate the offline Phase 6 seeded report.")
+    parser.add_argument("output_path", type=Path, help="Path for the self-contained HTML report")
+    args = parser.parse_args(arguments)
+    run_seeded_demo(args.output_path)
+    return 0
+
+
+if __name__ == "__main__":
+    raise SystemExit(main())

@@ -4,7 +4,7 @@ import re
 from datetime import UTC, datetime
 from pathlib import Path
 
-from costpilot.phase6 import FIXED_START_TIMESTAMP, iter_seeded_lifecycles, run_seeded_demo
+from costpilot.phase6 import FIXED_START_TIMESTAMP, iter_seeded_lifecycles, main, run_seeded_demo
 from costpilot.service import OfflineService
 
 ROOT = Path(__file__).parent.parent
@@ -64,3 +64,11 @@ def test_seeded_demo_is_aggregate_only_reconciled_and_byte_identical(tmp_path: P
     assert "simulated response" not in first_html
     assert "prompt_hash" not in first_html
     assert re.search(r"\b[a-f0-9]{64}\b", first_html) is None
+
+
+def test_phase6_command_writes_a_static_report(tmp_path: Path) -> None:
+    output_path = tmp_path / "report.html"
+
+    assert main([str(output_path)]) == 0
+
+    assert output_path.is_file()
