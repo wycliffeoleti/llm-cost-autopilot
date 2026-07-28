@@ -94,4 +94,5 @@ class FakeProvider:
             latency_ms=model.avg_latency_ms,
             cost_usd=cost,
             model_id=model.model_id,
+            simulated=True,
         )

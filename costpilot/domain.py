@@ -28,3 +28,4 @@ class Response:
     latency_ms: float
     cost_usd: float
     model_id: str
+    simulated: bool = False

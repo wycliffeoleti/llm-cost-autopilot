@@ -1,0 +1,3 @@
+reference_model_id: gpt-4o
+thresholds:
+  default: 1.0

@@ -1,0 +1,212 @@
+from dataclasses import replace
+
+import pytest
+
+from costpilot.domain import ModelConfig, Request, Response
+from costpilot.providers.fake import FAKE_MODELS, FakeProvider
+from costpilot.verification import (
+    VerificationResult,
+    rerun_with_reference,
+    should_escalate,
+    simulated_agreement_score,
+    verify_response,
+)
+
+
+class TrackingFakeProvider(FakeProvider):
+    def __init__(self, response: Response) -> None:
+        self.response = response
+        self.calls: list[tuple[Request, ModelConfig]] = []
+
+    def send(self, request: Request, model: ModelConfig) -> Response:
+        self.calls.append((request, model))
+        return self.response
+
+
+class SpyProvider:
+    def __init__(self, response: Response) -> None:
+        self.response = response
+        self.calls: list[tuple[Request, ModelConfig]] = []
+
+    def send(self, request: Request, model: ModelConfig) -> Response:
+        self.calls.append((request, model))
+        return self.response
+
+
+def test_simulated_agreement_ignores_fake_model_identity():
+    original = "[claude-haiku] simulated response (digest=abcd1234, input_tokens=5)"
+    reference = "[gpt-4o] simulated response (digest=abcd1234, input_tokens=5)"
+    assert simulated_agreement_score(original, reference) == 1.0
+
+
+def test_simulated_agreement_returns_zero_for_different_fake_payloads():
+    original = "[claude-haiku] simulated response (digest=abcd1234, input_tokens=5)"
+    reference = "[gpt-4o] simulated response (digest=deadbeef, input_tokens=5)"
+    assert simulated_agreement_score(original, reference) == 0.0
+
+
+def test_verify_response_calls_reference_once_and_accounts_for_costs():
+    request = Request(prompt="Summarize this quarterly report.", request_id="request-1")
+    original = FakeProvider().send(request, FAKE_MODELS["claude-haiku"])
+    reference = FakeProvider().send(request, FAKE_MODELS["gpt-4o"])
+    provider = TrackingFakeProvider(reference)
+
+    result = verify_response(
+        request, original, FAKE_MODELS["gpt-4o"], provider, threshold=1.0
+    )
+
+    assert provider.calls == [(request, FAKE_MODELS["gpt-4o"])]
+    assert result.original_model_id == "claude-haiku"
+    assert result.reference_model_id == "gpt-4o"
+    assert result.quality_score == 1.0
+    assert result.passed is True
+    assert result.simulated is True
+    assert result.original_cost_usd == original.cost_usd
+    assert result.reference_cost_usd == reference.cost_usd
+    assert result.escalation_cost_delta_usd == pytest.approx(
+        reference.cost_usd - original.cost_usd
+    )
+    assert original == FakeProvider().send(request, FAKE_MODELS["claude-haiku"])
+
+
+def test_verify_response_reports_failed_comparison_for_divergent_fake_output():
+    request = Request(prompt="Summarize this quarterly report.", request_id="request-1")
+    original = FakeProvider().send(request, FAKE_MODELS["claude-haiku"])
+    reference = replace(
+        FakeProvider().send(request, FAKE_MODELS["gpt-4o"]),
+        output_text="[gpt-4o] simulated response (digest=divergent, input_tokens=5)",
+    )
+
+    result = verify_response(
+        request,
+        original,
+        FAKE_MODELS["gpt-4o"],
+        TrackingFakeProvider(reference),
+        threshold=1.0,
+    )
+
+    assert result.quality_score == 0.0
+    assert result.passed is False
+
+
+def test_verify_response_rejects_invalid_threshold_before_reference_execution():
+    request = Request(prompt="Summarize this quarterly report.", request_id="request-1")
+    original = FakeProvider().send(request, FAKE_MODELS["claude-haiku"])
+    reference = FakeProvider().send(request, FAKE_MODELS["gpt-4o"])
+    provider = TrackingFakeProvider(reference)
+
+    with pytest.raises(ValueError, match="between 0.0 and 1.0"):
+        verify_response(request, original, FAKE_MODELS["gpt-4o"], provider, threshold=1.1)
+
+    assert provider.calls == []
+
+
+def test_verify_response_rejects_non_fake_provider_before_reference_execution():
+    request = Request(prompt="Summarize this quarterly report.", request_id="request-1")
+    original = FakeProvider().send(request, FAKE_MODELS["claude-haiku"])
+    reference = FakeProvider().send(request, FAKE_MODELS["gpt-4o"])
+    provider = SpyProvider(reference)
+
+    with pytest.raises(TypeError, match="FakeProvider"):
+        verify_response(request, original, FAKE_MODELS["gpt-4o"], provider, threshold=1.0)
+
+    assert provider.calls == []
+
+
+def test_verify_response_rejects_original_response_with_unknown_fake_model():
+    request = Request(prompt="Summarize this quarterly report.", request_id="request-1")
+    original = replace(
+        FakeProvider().send(request, FAKE_MODELS["claude-haiku"]),
+        model_id="not-a-fake-model",
+    )
+    provider = TrackingFakeProvider(FakeProvider().send(request, FAKE_MODELS["gpt-4o"]))
+
+    with pytest.raises(ValueError, match="unknown fake model"):
+        verify_response(request, original, FAKE_MODELS["gpt-4o"], provider, threshold=1.0)
+
+    assert provider.calls == []
+
+
+def test_verify_response_rejects_original_response_without_simulation_provenance():
+    request = Request(prompt="Summarize this quarterly report.", request_id="request-1")
+    original = Response(
+        output_text="A live-looking response",
+        input_tokens=5,
+        output_tokens=8,
+        latency_ms=1100.0,
+        cost_usd=0.0001,
+        model_id="gpt-4o",
+    )
+    provider = TrackingFakeProvider(FakeProvider().send(request, FAKE_MODELS["gpt-4o"]))
+
+    with pytest.raises(ValueError, match="simulated"):
+        verify_response(request, original, FAKE_MODELS["gpt-4o"], provider, threshold=1.0)
+
+    assert provider.calls == []
+
+
+@pytest.mark.parametrize(
+    ("reference_model", "message"),
+    [
+        (FAKE_MODELS["llama-local"], "high quality tier"),
+        (replace(FAKE_MODELS["gpt-4o"]), "canonical fake registry"),
+    ],
+)
+def test_verify_response_rejects_invalid_reference_model_before_execution(
+    reference_model: ModelConfig, message: str
+):
+    request = Request(prompt="Summarize this quarterly report.", request_id="request-1")
+    original = FakeProvider().send(request, FAKE_MODELS["claude-haiku"])
+    provider = TrackingFakeProvider(FakeProvider().send(request, FAKE_MODELS["gpt-4o"]))
+
+    with pytest.raises(ValueError, match=message):
+        verify_response(request, original, reference_model, provider, threshold=1.0)
+
+    assert provider.calls == []
+
+
+@pytest.mark.parametrize("passed, expected", [(True, False), (False, True)])
+def test_should_escalate_is_a_pure_inverse_of_passed(passed: bool, expected: bool):
+    result = VerificationResult(
+        original_model_id="claude-haiku",
+        reference_model_id="gpt-4o",
+        quality_score=1.0 if passed else 0.0,
+        threshold=1.0,
+        passed=passed,
+        simulated=True,
+        original_cost_usd=0.01,
+        reference_cost_usd=0.02,
+        escalation_cost_delta_usd=0.01,
+    )
+
+    assert should_escalate(result) is expected
+
+
+def test_rerun_with_reference_executes_reference_exactly_once():
+    request = Request(prompt="Summarize this quarterly report.", request_id="request-1")
+    reference = FakeProvider().send(request, FAKE_MODELS["gpt-4o"])
+    provider = TrackingFakeProvider(reference)
+
+    response = rerun_with_reference(request, FAKE_MODELS["gpt-4o"], provider)
+
+    assert response == reference
+    assert provider.calls == [(request, FAKE_MODELS["gpt-4o"])]
+
+
+@pytest.mark.parametrize(
+    ("reference_model", "message"),
+    [
+        (FAKE_MODELS["llama-local"], "high quality tier"),
+        (replace(FAKE_MODELS["gpt-4o"]), "canonical fake registry"),
+    ],
+)
+def test_rerun_with_reference_rejects_invalid_reference_model_before_execution(
+    reference_model: ModelConfig, message: str
+):
+    request = Request(prompt="Summarize this quarterly report.", request_id="request-1")
+    provider = TrackingFakeProvider(FakeProvider().send(request, FAKE_MODELS["gpt-4o"]))
+
+    with pytest.raises(ValueError, match=message):
+        rerun_with_reference(request, reference_model, provider)
+
+    assert provider.calls == []
