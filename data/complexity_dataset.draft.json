@@ -561,6 +561,76 @@
       "id": "c112",
       "tier": "tier_2",
       "text": "Determine whether this online review appears to be genuine or likely fake: Best product ever, five stars, buy now, changed my life completely."
+    },
+    {
+      "id": "c113",
+      "tier": "tier_2",
+      "text": "Classify this maintenance request, choosing plumbing, electrical, HVAC, or general: The upstairs bathroom faucet has been dripping constantly for the past two days."
+    },
+    {
+      "id": "c114",
+      "tier": "tier_2",
+      "text": "Categorize this job candidate's interview feedback, choosing strong hire, hire, no hire, or strong no hire: Solid technical skills and clear communication, but struggled with the system design portion and seemed underprepared for that section."
+    },
+    {
+      "id": "c115",
+      "tier": "tier_2",
+      "text": "Determine the sentiment trend of this stock analyst note, choosing bullish, bearish, or neutral: While near-term headwinds from supply chain costs persist, we see the company's long-term positioning in the market as increasingly favorable."
+    },
+    {
+      "id": "c116",
+      "tier": "tier_2",
+      "text": "Classify this insurance claim type: The claimant reports a rear-end collision at a stoplight resulting in bumper damage and no injuries."
+    },
+    {
+      "id": "c117",
+      "tier": "tier_2",
+      "text": "Categorize this forum post's tone, choosing seeking advice, venting, or sharing an update: Just wanted to share that after months of sleep training, our toddler is finally sleeping through the night."
+    },
+    {
+      "id": "c118",
+      "tier": "tier_2",
+      "text": "Analyze this sales data and identify the top three trends: Q1 sales, Electronics $120K, Apparel $85K, Home Goods $60K. Q2 sales, Electronics $95K, Apparel $110K, Home Goods $72K. Q3 sales, Electronics $130K, Apparel $102K, Home Goods $58K."
+    },
+    {
+      "id": "c119",
+      "tier": "tier_2",
+      "text": "Break down the pros and cons of remote work based on this survey data: 62 percent of respondents reported higher job satisfaction working remotely, while 45 percent reported feeling less connected to their team, and 30 percent cited difficulty separating work from personal life."
+    },
+    {
+      "id": "c120",
+      "tier": "tier_2",
+      "text": "Analyze this website traffic report and identify which channel is underperforming relative to its cost: Paid search, 40 percent of spend, 25 percent of conversions. Organic search, 10 percent of spend, 35 percent of conversions. Social ads, 50 percent of spend, 40 percent of conversions."
+    },
+    {
+      "id": "c121",
+      "tier": "tier_2",
+      "text": "Break down this budget spreadsheet into categories and flag any line item that exceeds 20 percent of total spend: Marketing $45,000. Engineering $180,000. Sales $60,000. Operations $35,000. Total $320,000."
+    },
+    {
+      "id": "c122",
+      "tier": "tier_2",
+      "text": "Analyze this customer churn data and identify the strongest predictor of cancellation: Customers who contacted support more than twice churned at a 38 percent rate, versus 12 percent for customers with zero or one support contact. Tenure and plan tier showed weaker correlation with churn."
+    },
+    {
+      "id": "c123",
+      "tier": "tier_2",
+      "text": "Break down the risk factors described in this project status report: The project is currently two weeks behind schedule due to a key vendor delay, has used 70 percent of its budget with 40 percent of scope remaining, and has one open dependency on a team outside the project."
+    },
+    {
+      "id": "c124",
+      "tier": "tier_2",
+      "text": "Analyze this employee engagement survey and summarize the three lowest-scoring categories: Compensation 3.2 out of 5. Career growth 2.8 out of 5. Management support 3.9 out of 5. Work-life balance 3.1 out of 5. Recognition 2.6 out of 5. Team collaboration 4.1 out of 5."
+    },
+    {
+      "id": "c125",
+      "tier": "tier_2",
+      "text": "Break down this A/B test result and determine which variant performed better and by how much: Variant A, 2,000 visitors, 180 signups. Variant B, 2,050 visitors, 215 signups."
+    },
+    {
+      "id": "c126",
+      "tier": "tier_2",
+      "text": "Analyze this server performance log summary and identify the likely bottleneck: CPU utilization averaged 35 percent, memory utilization averaged 42 percent, and database query latency spiked to 1,800 milliseconds during peak traffic while application response time remained under 200 milliseconds outside of database calls."
     }
   ]
 }
