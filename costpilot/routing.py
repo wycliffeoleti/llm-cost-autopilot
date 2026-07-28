@@ -4,6 +4,7 @@ from pathlib import Path
 
 import yaml
 
+from costpilot.classifier import predict_tier
 from costpilot.domain import ModelConfig
 from costpilot.providers.fake import FAKE_MODELS
 
@@ -20,3 +21,7 @@ def route(tier: str, config: dict[str, str]) -> ModelConfig:
     if model_id not in FAKE_MODELS:
         raise ValueError(f"Routing config maps {tier!r} to unknown model {model_id!r}")
     return FAKE_MODELS[model_id]
+
+
+def classify_and_route(prompt: str, model, routing_config: dict[str, str]) -> ModelConfig:
+    return route(predict_tier(prompt, model), routing_config)
