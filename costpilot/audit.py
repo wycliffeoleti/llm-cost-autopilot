@@ -233,6 +233,10 @@ class AuditEvent:
                 != verification_cost
             ):
                 raise ValueError("Audit verification provenance does not match the simulated responses")
+            if verification.escalation_cost_delta_usd != (
+                verification.reference_cost_usd - verification.original_cost_usd
+            ):
+                raise ValueError("Audit verification escalation cost delta does not match its costs")
             if FAKE_MODELS[verification_response.model_id].quality_tier != "high":
                 raise ValueError("Audit verification model must have high quality tier")
             if type(verification.passed) is not bool:
