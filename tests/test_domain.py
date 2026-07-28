@@ -39,3 +39,4 @@ def test_response_holds_all_required_fields():
     assert response.latency_ms == 1100.0
     assert response.cost_usd == 0.00012
     assert response.model_id == "gpt-4o"
+    assert response.simulated is False

@@ -127,6 +127,44 @@ def test_verify_response_rejects_original_response_with_unknown_fake_model():
     assert provider.calls == []
 
 
+def test_verify_response_rejects_original_response_without_simulation_provenance():
+    request = Request(prompt="Summarize this quarterly report.", request_id="request-1")
+    original = Response(
+        output_text="A live-looking response",
+        input_tokens=5,
+        output_tokens=8,
+        latency_ms=1100.0,
+        cost_usd=0.0001,
+        model_id="gpt-4o",
+    )
+    provider = TrackingFakeProvider(FakeProvider().send(request, FAKE_MODELS["gpt-4o"]))
+
+    with pytest.raises(ValueError, match="simulated"):
+        verify_response(request, original, FAKE_MODELS["gpt-4o"], provider, threshold=1.0)
+
+    assert provider.calls == []
+
+
+@pytest.mark.parametrize(
+    ("reference_model", "message"),
+    [
+        (FAKE_MODELS["llama-local"], "high quality tier"),
+        (replace(FAKE_MODELS["gpt-4o"]), "canonical fake registry"),
+    ],
+)
+def test_verify_response_rejects_invalid_reference_model_before_execution(
+    reference_model: ModelConfig, message: str
+):
+    request = Request(prompt="Summarize this quarterly report.", request_id="request-1")
+    original = FakeProvider().send(request, FAKE_MODELS["claude-haiku"])
+    provider = TrackingFakeProvider(FakeProvider().send(request, FAKE_MODELS["gpt-4o"]))
+
+    with pytest.raises(ValueError, match=message):
+        verify_response(request, original, reference_model, provider, threshold=1.0)
+
+    assert provider.calls == []
+
+
 @pytest.mark.parametrize("passed, expected", [(True, False), (False, True)])
 def test_should_escalate_is_a_pure_inverse_of_passed(passed: bool, expected: bool):
     result = VerificationResult(
@@ -153,3 +191,22 @@ def test_rerun_with_reference_executes_reference_exactly_once():
 
     assert response == reference
     assert provider.calls == [(request, FAKE_MODELS["gpt-4o"])]
+
+
+@pytest.mark.parametrize(
+    ("reference_model", "message"),
+    [
+        (FAKE_MODELS["llama-local"], "high quality tier"),
+        (replace(FAKE_MODELS["gpt-4o"]), "canonical fake registry"),
+    ],
+)
+def test_rerun_with_reference_rejects_invalid_reference_model_before_execution(
+    reference_model: ModelConfig, message: str
+):
+    request = Request(prompt="Summarize this quarterly report.", request_id="request-1")
+    provider = TrackingFakeProvider(FakeProvider().send(request, FAKE_MODELS["gpt-4o"]))
+
+    with pytest.raises(ValueError, match=message):
+        rerun_with_reference(request, reference_model, provider)
+
+    assert provider.calls == []

@@ -30,6 +30,7 @@ def test_send_returns_well_formed_response():
     assert response.output_tokens > 0
     assert response.latency_ms == model.avg_latency_ms
     assert response.cost_usd >= 0
+    assert response.simulated is True
 
 
 def test_send_is_deterministic_for_same_request_and_model():

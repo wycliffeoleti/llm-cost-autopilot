@@ -73,6 +73,9 @@ def verify_response(
     """Compare an existing fake response with one explicit fake reference run."""
     _validate_threshold(threshold)
     _validate_fake_provider(provider)
+    _validate_reference_model(reference_model)
+    if not original_response.simulated:
+        raise ValueError("Verification requires a simulated original response")
     if original_response.model_id not in FAKE_MODELS:
         raise ValueError("Original response contains an unknown fake model")
     reference_response = provider.send(request, reference_model)
@@ -105,6 +108,7 @@ def rerun_with_reference(
 ) -> Response:
     """Execute one explicit reference-model run without retry or persistence."""
     _validate_fake_provider(provider)
+    _validate_reference_model(reference_model)
     return provider.send(request, reference_model)
 
 
@@ -118,3 +122,10 @@ def _validate_threshold(threshold: float) -> None:
 def _validate_fake_provider(provider: Provider) -> None:
     if not isinstance(provider, FakeProvider):
         raise TypeError("Verification requires a FakeProvider")
+
+
+def _validate_reference_model(reference_model: ModelConfig) -> None:
+    if FAKE_MODELS.get(reference_model.model_id) is not reference_model:
+        raise ValueError("Reference model must come from the canonical fake registry")
+    if reference_model.quality_tier != "high":
+        raise ValueError("Verification reference model must have high quality tier")
