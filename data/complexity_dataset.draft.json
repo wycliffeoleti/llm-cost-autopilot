@@ -911,6 +911,76 @@
       "id": "c182",
       "tier": "tier_3",
       "text": "Compose a reflective personal essay opening about the first time you failed at something that mattered to you."
+    },
+    {
+      "id": "c183",
+      "tier": "tier_3",
+      "text": "Write a short story from the point of view of a house that has just been sold after 40 years with the same family."
+    },
+    {
+      "id": "c184",
+      "tier": "tier_3",
+      "text": "Draft an imaginative product description for a fictional gadget that translates a pet's body language into plain English."
+    },
+    {
+      "id": "c185",
+      "tier": "tier_3",
+      "text": "Write a tense negotiation scene between two business partners on the verge of dissolving their long-running partnership."
+    },
+    {
+      "id": "c186",
+      "tier": "tier_3",
+      "text": "Compose a short letter from a time traveler to their past self, warning about one specific mistake without giving too much away."
+    },
+    {
+      "id": "c187",
+      "tier": "tier_3",
+      "text": "Write an evocative travel-blog-style paragraph describing the first morning of a solo trip to a remote mountain village."
+    },
+    {
+      "id": "c188",
+      "tier": "tier_3",
+      "text": "An employee has been late to work five times this month due to a documented medical condition. Should this count against their performance review? Justify your reasoning considering both fairness and policy consistency."
+    },
+    {
+      "id": "c189",
+      "tier": "tier_3",
+      "text": "Evaluate whether this marketing claim is misleading, weighing the literal wording against the likely consumer interpretation: Our supplement is clinically proven to support energy levels, based on a single unpublished internal study with 12 participants."
+    },
+    {
+      "id": "c190",
+      "tier": "tier_3",
+      "text": "A manager wants to promote a highly skilled engineer who is difficult to work with over a less technically strong but highly collaborative peer. Weigh the considerations and offer a recommendation."
+    },
+    {
+      "id": "c191",
+      "tier": "tier_3",
+      "text": "Assess whether it is ethical for a company to use a customer's past purchase history to show them a higher price than a new customer would see for the identical product, and explain the reasoning on both sides."
+    },
+    {
+      "id": "c192",
+      "tier": "tier_3",
+      "text": "A whistleblower has revealed that a mid-level manager falsified a minor compliance report to meet a deadline, with no material harm resulting. Weigh how the company should respond, balancing accountability with proportionality."
+    },
+    {
+      "id": "c193",
+      "tier": "tier_3",
+      "text": "Evaluate the fairness of a school's policy that bases valedictorian selection solely on GPA, without accounting for differences in course difficulty between students, and suggest whether adjustment is warranted."
+    },
+    {
+      "id": "c194",
+      "tier": "tier_3",
+      "text": "A freelance contractor delivered excellent work but missed the agreed deadline by three days due to a family emergency they disclosed partway through. Weigh whether the client is justified in withholding the final 20 percent of payment per the contract's late-delivery clause."
+    },
+    {
+      "id": "c195",
+      "tier": "tier_3",
+      "text": "Assess whether a company should terminate a long-tenured, well-liked employee whose performance has quietly declined over the past year due to what appears to be untreated burnout, and outline the considerations involved."
+    },
+    {
+      "id": "c196",
+      "tier": "tier_3",
+      "text": "Evaluate whether it is reasonable for a landlord to raise rent by 25 percent at lease renewal in a rapidly appreciating rental market, weighing the tenant's hardship against the landlord's financial rationale."
     }
   ]
 }
