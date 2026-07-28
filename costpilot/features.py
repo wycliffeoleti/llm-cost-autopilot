@@ -2,7 +2,8 @@ import re
 
 _INSTRUCTION_VERBS = (
     "analyze", "compare", "evaluate", "synthesize", "design",
-    "critique", "contrast", "recommend", "justify", "assess",
+    "critique", "contrast", "recommend", "justify", "assess", "diagnose",
+    "determine", "draft", "reason", "write", "compose", "walk",
 )
 _INSTRUCTION_VERB_PATTERN = re.compile(
     r"\b(?:" + "|".join(_INSTRUCTION_VERBS) + r")\b", re.IGNORECASE

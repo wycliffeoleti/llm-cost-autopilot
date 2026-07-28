@@ -25,6 +25,14 @@ def test_instruction_verb_count_returns_zero_for_plain_question():
     assert instruction_verb_count("What is the capital of France?") == 0
 
 
+def test_instruction_verb_count_counts_complex_reasoning_verbs():
+    assert instruction_verb_count("Diagnose and determine the best strategy.") == 2
+
+
+def test_instruction_verb_count_counts_draft_as_an_instruction_verb():
+    assert instruction_verb_count("Draft a structured response.") == 1
+
+
 def test_constraint_count_counts_constraint_keywords():
     assert constraint_count("You must include at least three examples.") == 2
 

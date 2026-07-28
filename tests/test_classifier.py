@@ -5,6 +5,7 @@ import pytest
 from sklearn.linear_model import LogisticRegression
 
 from costpilot.classifier import (
+    evaluate,
     load_dataset,
     train_classifier,
     train_test_split_dataset,
@@ -72,3 +73,15 @@ def test_train_classifier_returns_a_fitted_logistic_regression():
     model = train_classifier(train)
     assert isinstance(model, LogisticRegression)
     assert set(model.classes_) == {"tier_1", "tier_2", "tier_3"}
+
+
+def test_prototype_held_out_accuracy_on_draft_dataset():
+    """Pipeline check only; this is not a real-world routing-quality claim."""
+    dataset = load_dataset(DATASET_PATH)
+    assert dataset.status == "ai_drafted_pending_human_review"
+    train, test = train_test_split_dataset(dataset)
+    model = train_classifier(train)
+    result = evaluate(model, test)
+    assert result.accuracy >= 0.80
+    assert len(result.confusion) == 3
+    assert all(len(row) == 3 for row in result.confusion)

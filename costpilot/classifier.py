@@ -6,6 +6,7 @@ from pathlib import Path
 
 import numpy as np
 from sklearn.linear_model import LogisticRegression
+from sklearn.metrics import confusion_matrix
 from sklearn.model_selection import train_test_split
 
 from costpilot.features import FEATURE_KEYS, extract_features
@@ -70,3 +71,20 @@ def train_classifier(
     model = LogisticRegression(max_iter=1000, random_state=seed)
     model.fit(features, labels)
     return model
+
+
+@dataclass(frozen=True)
+class EvaluationResult:
+    accuracy: float
+    confusion: list[list[int]]
+
+
+def evaluate(
+    model: LogisticRegression, test_examples: list[LabeledExample]
+) -> EvaluationResult:
+    features = _feature_matrix([example.text for example in test_examples])
+    labels = [example.tier for example in test_examples]
+    predictions = model.predict(features)
+    accuracy = float(model.score(features, labels))
+    confusion = confusion_matrix(labels, predictions, labels=list(TIER_LABELS))
+    return EvaluationResult(accuracy=accuracy, confusion=confusion.tolist())
