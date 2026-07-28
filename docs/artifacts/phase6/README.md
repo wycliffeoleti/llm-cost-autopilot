@@ -2,7 +2,7 @@
 
 This directory publishes the aggregate-only output of an offline deterministic
 seeded demonstration. It contains a self-contained HTML report and one
-fixed-viewport screenshot of that local HTML file. It contains no request or
+full-page screenshot of that local HTML file. It contains no request or
 response text, request-level records, database, event export, or provider/API
 payload capture.
 
@@ -21,13 +21,19 @@ timestamps, uses `FakeProvider`, and stores its temporary local audit data only
 for the duration of the process. Running the command again produces identical
 HTML bytes.
 
-The screenshot was captured locally at a 1440x1200 viewport:
+The screenshot is a 1440x1753 full-page local capture. It was captured with
+Chrome DevTools `Page.captureScreenshot` using `captureBeyondViewport: true`,
+so it visibly includes every report section and the closing disclaimer:
 
 ```bash
-chromium --headless --disable-gpu --hide-scrollbars --window-size=1440,1200 \
-  --screenshot=docs/artifacts/phase6/seeded-lifecycle-report.png \
+google-chrome --headless --disable-gpu --hide-scrollbars --window-size=1440,1200 \
+  --remote-debugging-port=9222 \
   "file://$PWD/docs/artifacts/phase6/seeded-lifecycle-report.html"
 ```
+
+Then use `Page.captureScreenshot` with `format: "png"` and
+`captureBeyondViewport: true` in the local Chrome DevTools session. No server
+or network connection is involved.
 
 ## Interpretation boundary
 

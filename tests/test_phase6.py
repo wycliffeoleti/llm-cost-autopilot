@@ -1,6 +1,7 @@
 from __future__ import annotations
 
 import re
+import struct
 from datetime import UTC, datetime
 from pathlib import Path
 
@@ -18,6 +19,12 @@ def _service(database_path: Path) -> OfflineService:
         verification_config_path=ROOT / "config" / "verification.yaml",
         audit_database_path=database_path,
     )
+
+
+def _png_dimensions(path: Path) -> tuple[int, int]:
+    header = path.read_bytes()[:24]
+    assert header.startswith(b"\x89PNG\r\n\x1a\n")
+    return struct.unpack(">II", header[16:24])
 
 
 def test_complete_uses_supplied_utc_timestamp(tmp_path: Path) -> None:
@@ -83,6 +90,7 @@ def test_tracked_phase6_artifacts_are_aggregate_only_and_documented() -> None:
     assert html_path.is_file()
     assert png_path.is_file()
     assert png_path.read_bytes().startswith(b"\x89PNG\r\n\x1a\n")
+    assert _png_dimensions(png_path) == (1440, 1753)
     public_text = "\n".join(
         (
             html_path.read_text(encoding="utf-8"),
@@ -91,6 +99,7 @@ def test_tracked_phase6_artifacts_are_aggregate_only_and_documented() -> None:
         )
     )
     assert "Offline deterministic seeded demonstration." in public_text
+    assert "full-page" in public_text
     assert "uv run python -m costpilot.phase6" in public_text
     assert "Summarize the following paragraph" not in public_text
     assert "simulated response" not in public_text

@@ -21,6 +21,9 @@ def test_report_aggregates_utc_day_and_week_and_simulated_deltas(tmp_path):
 
     assert report.event_count == 2
     assert list(report.daily_costs) == [("2026-07-27", report.daily_costs[0][1]), ("2026-07-28", report.daily_costs[1][1])]
+    assert report.weekly_costs == [
+        ("2026-W31", sum(cost for _, cost in report.daily_costs)),
+    ]
     assert report.routing_distribution == [("anthropic/claude-haiku", 2)]
     assert report.routing_only_reduction_microusd == (
         report.direct_gpt4o_cost_microusd - report.routed_cost_microusd

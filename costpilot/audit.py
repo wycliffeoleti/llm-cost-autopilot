@@ -16,6 +16,12 @@ MICRODOLLARS_PER_USD = 1_000_000
 VALID_CLASSIFIER_TIERS = frozenset({"tier_1", "tier_2", "tier_3"})
 
 
+def _iso_utc_week(timestamp: str) -> str:
+    """Return the ISO year/week for a persisted UTC timestamp."""
+    iso_year, iso_week, _ = datetime.fromisoformat(timestamp).astimezone(UTC).isocalendar()
+    return f"{iso_year:04d}-W{iso_week:02d}"
+
+
 def cost_usd_to_microusd(cost_usd: float) -> int:
     """Round one simulated provider invocation into its stored currency unit."""
     if isinstance(cost_usd, bool) or not isinstance(cost_usd, (int, float)):
@@ -333,6 +339,7 @@ class SQLiteAuditStore:
     def _connect(self) -> sqlite3.Connection:
         connection = sqlite3.connect(self.path)
         connection.row_factory = sqlite3.Row
+        connection.create_function("iso_utc_week", 1, _iso_utc_week, deterministic=True)
         return connection
 
     def _initialize(self) -> None:
@@ -443,8 +450,8 @@ class SQLiteAuditStore:
                 ).fetchall(),
                 "weekly": connection.execute(
                     """
-                    SELECT strftime('%Y-W%W', timestamp), SUM(lifecycle_cost_microusd)
-                    FROM audit_events GROUP BY strftime('%Y-W%W', timestamp) ORDER BY 1
+                    SELECT iso_utc_week(timestamp), SUM(lifecycle_cost_microusd)
+                    FROM audit_events GROUP BY iso_utc_week(timestamp) ORDER BY 1
                     """
                 ).fetchall(),
                 "routing": connection.execute(

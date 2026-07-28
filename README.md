@@ -29,8 +29,9 @@ uv run python -m costpilot.phase6 docs/artifacts/phase6/seeded-lifecycle-report.
 
 The public report is aggregate-only. Request/response text, request-level
 records, temporary audit database, event exports, and provider/API payload
-captures remain out of the repository. The fixed-viewport PNG is a local
-capture of the self-contained HTML report, not a product UI or deployment.
+captures remain out of the repository. The full-page PNG is a local capture of
+the self-contained HTML report, including every report section and its closing
+disclaimer; it is not a product UI or deployment.
 
 **Offline deterministic seeded demonstration.** The values shown are fixed
 simulated values from `FakeProvider`, not measurements of real spend, answer
