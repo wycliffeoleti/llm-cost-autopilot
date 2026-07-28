@@ -6,7 +6,28 @@ An offline, deterministic prototype of an LLM cost-routing pipeline (BASWE Proje
 
 - **Phase 1 — unified model interface:** complete.
 - **Phase 2 — complexity classifier and offline routing:** complete.
-- **Phases 3–6** (quality-verification loop, audit/dashboard, API, containerization): not started.
+- **Phase 3 — offline simulated verification and explicit escalation:** complete.
+- **Phases 4–6** (audit/dashboard, API, containerization): not started.
+
+## Phase 3 — simulated verification
+
+Phase 3 models the control flow of a quality-verification loop entirely
+offline. It runs the same request through the configured high-tier
+`FakeProvider` reference model, removes the fake model prefix from each output,
+and records a deterministic binary agreement score. A failed agreement result
+can be passed to `should_escalate`, after which the caller may explicitly call
+`rerun_with_reference`.
+
+Every `VerificationResult` has `simulated=True`. This is not a measurement of
+answer quality: fake response text has no semantic content, so agreement is
+only a deterministic payload comparison. Verification neither trains nor
+updates the Phase 2 classifier, and Phase 3 adds no live providers,
+credentials, network calls, background queues, persistence, APIs, or retries.
+
+The reference model and threshold are validated from
+`config/verification.yaml`; the reference must be one of the repository's
+fixed `FAKE_MODELS`, and the threshold must be finite and between `0.0` and
+`1.0`.
 
 ## Data provenance — outstanding review gate
 
