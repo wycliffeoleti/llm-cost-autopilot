@@ -5,12 +5,12 @@ build-backend = "setuptools.build_meta"
 [project]
 name = "llm-cost-autopilot"
 version = "0.1.0"
-description = "BASWE Project 2 - LLM Cost Autopilot (Phase 1: unified model interface)"
+description = "BASWE Project 2 - offline LLM complexity classification and cost routing"
 requires-python = ">=3.11"
-dependencies = []
+dependencies = ["scikit-learn>=1.4,<2", "numpy>=1.26,<2", "pyyaml>=6.0,<7"]
 
 [dependency-groups]
-dev = ["pytest>=8,<9", "ruff>=0.6,<1", "mypy>=1.11,<2"]
+dev = ["pytest>=8,<9", "ruff>=0.6,<1", "mypy>=1.11,<2", "types-PyYAML>=6.0,<7"]
 
 [tool.setuptools]
 packages = ["costpilot", "costpilot.providers"]
@@ -27,3 +27,7 @@ python_version = "3.11"
 strict = true
 plugins = []
 exclude = ["tests"]
+
+[[tool.mypy.overrides]]
+module = ["sklearn.*"]
+ignore_missing_imports = true
