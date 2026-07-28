@@ -981,6 +981,76 @@
       "id": "c196",
       "tier": "tier_3",
       "text": "Evaluate whether it is reasonable for a landlord to raise rent by 25 percent at lease renewal in a rapidly appreciating rental market, weighing the tenant's hardship against the landlord's financial rationale."
+    },
+    {
+      "id": "c197",
+      "tier": "tier_3",
+      "text": "A researcher discovers a flaw in their own already-published study's methodology that modestly weakens but does not invalidate the main conclusion. Weigh the researcher's obligations here and what the right course of action is."
+    },
+    {
+      "id": "c198",
+      "tier": "tier_3",
+      "text": "Assess whether a social media platform should remove a post that is factually accurate but framed in a way likely to cause public alarm, and explain the trade-offs involved."
+    },
+    {
+      "id": "c199",
+      "tier": "tier_3",
+      "text": "A manager must decide whether to lay off a strong performer or a weaker performer with significantly more seniority and tenure protections during a required team reduction. Reason through the fairness considerations."
+    },
+    {
+      "id": "c200",
+      "tier": "tier_3",
+      "text": "Evaluate whether a doctor should honor a competent adult patient's explicit refusal of a low-risk, clearly beneficial treatment, and explain the ethical tension involved."
+    },
+    {
+      "id": "c201",
+      "tier": "tier_3",
+      "text": "Assess whether it's appropriate for a nonprofit to accept a large donation from a company whose broader business practices conflict with the nonprofit's mission, and lay out the considerations on each side."
+    },
+    {
+      "id": "c202",
+      "tier": "tier_3",
+      "text": "A student is caught using an AI tool to help draft an essay in a way that falls into a gray area of the course's academic integrity policy. Weigh how strictly the policy should be enforced given the ambiguity."
+    },
+    {
+      "id": "c203",
+      "tier": "tier_3",
+      "text": "Evaluate whether a company should disclose a minor, already-fixed security vulnerability to customers even though disclosure carries reputational risk and no customer data was actually accessed."
+    },
+    {
+      "id": "c204",
+      "tier": "tier_3",
+      "text": "Assess the fairness of a hiring policy that gives internal referrals a fast-tracked interview process, potentially disadvantaging equally qualified external candidates, and explain the trade-offs."
+    },
+    {
+      "id": "c205",
+      "tier": "tier_3",
+      "text": "A team lead wants to give a high-visibility project to a newer employee to help their growth, over a tenured employee who has quietly wanted the opportunity for years. Weigh the considerations involved."
+    },
+    {
+      "id": "c206",
+      "tier": "tier_3",
+      "text": "Evaluate whether an insurance company is justified in denying a claim based on a technicality in the policy wording, even though the denial contradicts the clear intent both parties understood when the policy was purchased."
+    },
+    {
+      "id": "c207",
+      "tier": "tier_3",
+      "text": "Assess whether a journalist should publish leaked internal documents that reveal wrongdoing, given that the leak itself may have violated a confidentiality agreement the source signed."
+    },
+    {
+      "id": "c208",
+      "tier": "tier_3",
+      "text": "A company discovers that a popular product feature, beloved by a small vocal group of power users, is used by less than 1 percent of the overall customer base and is expensive to maintain. Weigh whether it should be deprecated."
+    },
+    {
+      "id": "c209",
+      "tier": "tier_3",
+      "text": "Evaluate whether a manager should intervene in a personal conflict between two team members that is beginning to affect team morale but has not yet crossed into policy-violating behavior."
+    },
+    {
+      "id": "c210",
+      "tier": "tier_3",
+      "text": "Assess whether a city should approve a new development project that would ease a housing shortage but requires demolishing a historically significant, though not officially landmarked, building."
     }
   ]
 }
