@@ -1,6 +1,7 @@
 from __future__ import annotations
 
 import math
+import re
 from dataclasses import dataclass
 from pathlib import Path
 from typing import Any
@@ -37,3 +38,10 @@ def load_verification_config(path: Path) -> VerificationConfig:
     return VerificationConfig(
         reference_model=FAKE_MODELS[model_id], default_threshold=threshold
     )
+
+
+def simulated_agreement_score(original_text: str, reference_text: str) -> float:
+    def normalize(text: str) -> str:
+        return re.sub(r"^\[[^]]+\]\s*", "", text).strip()
+
+    return 1.0 if normalize(original_text) == normalize(reference_text) else 0.0
