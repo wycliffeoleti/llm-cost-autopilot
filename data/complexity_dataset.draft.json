@@ -631,6 +631,76 @@
       "id": "c126",
       "tier": "tier_2",
       "text": "Analyze this server performance log summary and identify the likely bottleneck: CPU utilization averaged 35 percent, memory utilization averaged 42 percent, and database query latency spiked to 1,800 milliseconds during peak traffic while application response time remained under 200 milliseconds outside of database calls."
+    },
+    {
+      "id": "c127",
+      "tier": "tier_2",
+      "text": "Break down this competitive pricing table and identify where the company is positioned relative to competitors: Our product $49 per month. Competitor A $39 per month with fewer features. Competitor B $59 per month with a similar feature set. Competitor C $45 per month with a usage cap."
+    },
+    {
+      "id": "c128",
+      "tier": "tier_2",
+      "text": "Analyze this hiring funnel data and identify the stage with the largest drop-off: Applications 500. Phone screens 120. Technical interviews 60. Onsite interviews 25. Offers 10. Accepted 8."
+    },
+    {
+      "id": "c129",
+      "tier": "tier_2",
+      "text": "Break down this expense report by category and calculate the percentage spent on travel: Airfare $850. Hotel $600. Meals $220. Ground transportation $130. Total $1,800."
+    },
+    {
+      "id": "c130",
+      "tier": "tier_2",
+      "text": "Analyze this feature usage data and identify which features are candidates for deprecation due to low adoption: Dashboard, 92 percent of users active monthly. Reports export, 8 percent of users active monthly. Custom alerts, 65 percent of users active monthly. Legacy import tool, 3 percent of users active monthly."
+    },
+    {
+      "id": "c131",
+      "tier": "tier_2",
+      "text": "Break down this warehouse inventory report and flag SKUs at risk of stockout within two weeks based on current sell-through rate: SKU A, 40 units on hand, selling 5 per day. SKU B, 200 units on hand, selling 3 per day. SKU C, 15 units on hand, selling 4 per day."
+    },
+    {
+      "id": "c132",
+      "tier": "tier_2",
+      "text": "Analyze this marketing campaign performance summary across channels and identify the best-performing one by cost per acquisition: Email, $8,000 spend, 400 conversions. Social, $15,000 spend, 500 conversions. Search, $20,000 spend, 800 conversions."
+    },
+    {
+      "id": "c133",
+      "tier": "tier_2",
+      "text": "Break down this patient satisfaction survey by department and identify the department needing the most improvement: Cardiology 4.5 out of 5. Emergency 3.1 out of 5. Pediatrics 4.7 out of 5. Radiology 4.0 out of 5."
+    },
+    {
+      "id": "c134",
+      "tier": "tier_2",
+      "text": "Analyze this energy usage report and identify the time period with the highest consumption relative to typical baseline: Weekday daytime, 120 percent of baseline. Weekday evening, 140 percent of baseline. Weekend daytime, 90 percent of baseline. Weekend evening, 160 percent of baseline."
+    },
+    {
+      "id": "c135",
+      "tier": "tier_2",
+      "text": "Break down this supply chain delay report and identify the single largest contributing factor: Delays attributed to customs processing 45 percent, supplier production capacity 30 percent, freight carrier availability 15 percent, internal order processing 10 percent."
+    },
+    {
+      "id": "c136",
+      "tier": "tier_2",
+      "text": "Analyze this classroom test score distribution and identify whether the results suggest the test was too difficult: Out of 30 students, 4 scored above 90 percent, 8 scored 70 to 89 percent, 12 scored 50 to 69 percent, and 6 scored below 50 percent."
+    },
+    {
+      "id": "c137",
+      "tier": "tier_2",
+      "text": "Break down this app store review data by star rating and summarize the most common complaint among 1-star reviews: 1-star reviews, 45 total, 30 mention crashes on startup, 10 mention poor customer support, 5 mention pricing."
+    },
+    {
+      "id": "c138",
+      "tier": "tier_2",
+      "text": "Analyze this quarterly headcount report and identify which department grew fastest in percentage terms: Engineering 40 to 52. Sales 20 to 24. Support 15 to 25. Marketing 10 to 11."
+    },
+    {
+      "id": "c139",
+      "tier": "tier_2",
+      "text": "Break down this donor contribution report for the nonprofit and identify what percentage of total funds came from the top 10 donors: Total raised $500,000. Top 10 donors contributed a combined $310,000, with the remaining amount coming from 1,200 smaller individual donations."
+    },
+    {
+      "id": "c140",
+      "tier": "tier_2",
+      "text": "Analyze this website A/B test on page load time and conversion rate, and determine whether the data supports a causal link: Pages loading under 2 seconds converted at 4.8 percent. Pages loading 2 to 4 seconds converted at 3.9 percent. Pages loading over 4 seconds converted at 2.1 percent."
     }
   ]
 }
