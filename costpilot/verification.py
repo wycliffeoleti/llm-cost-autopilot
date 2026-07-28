@@ -10,7 +10,7 @@ import yaml
 
 from costpilot.domain import ModelConfig, Request, Response
 from costpilot.ports import Provider
-from costpilot.providers.fake import FAKE_MODELS
+from costpilot.providers.fake import FAKE_MODELS, FakeProvider
 
 
 @dataclass(frozen=True)
@@ -40,6 +40,8 @@ def load_verification_config(path: Path) -> VerificationConfig:
     model_id = raw.get("reference_model_id")
     if not isinstance(model_id, str) or model_id not in FAKE_MODELS:
         raise ValueError("Verification config contains an unknown reference model")
+    if FAKE_MODELS[model_id].quality_tier != "high":
+        raise ValueError("Verification reference model must have high quality tier")
 
     thresholds = raw.get("thresholds")
     threshold = thresholds.get("default") if isinstance(thresholds, dict) else None
@@ -70,6 +72,9 @@ def verify_response(
 ) -> VerificationResult:
     """Compare an existing fake response with one explicit fake reference run."""
     _validate_threshold(threshold)
+    _validate_fake_provider(provider)
+    if original_response.model_id not in FAKE_MODELS:
+        raise ValueError("Original response contains an unknown fake model")
     reference_response = provider.send(request, reference_model)
     if reference_response.model_id != reference_model.model_id:
         raise ValueError("Reference response model ID does not match reference model")
@@ -99,6 +104,7 @@ def rerun_with_reference(
     request: Request, reference_model: ModelConfig, provider: Provider
 ) -> Response:
     """Execute one explicit reference-model run without retry or persistence."""
+    _validate_fake_provider(provider)
     return provider.send(request, reference_model)
 
 
@@ -107,3 +113,8 @@ def _validate_threshold(threshold: float) -> None:
         raise TypeError("Verification threshold must be numeric")
     if not math.isfinite(threshold) or not 0.0 <= threshold <= 1.0:
         raise ValueError("Verification threshold must be between 0.0 and 1.0")
+
+
+def _validate_fake_provider(provider: Provider) -> None:
+    if not isinstance(provider, FakeProvider):
+        raise TypeError("Verification requires a FakeProvider")

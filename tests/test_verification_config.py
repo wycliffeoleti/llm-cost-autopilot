@@ -18,6 +18,7 @@ def test_load_verification_config_returns_known_reference_model_and_default_thre
     "contents",
     [
         "reference_model_id: no-such-model\nthresholds:\n  default: 1.0\n",
+        "reference_model_id: gpt-4o-mini\nthresholds:\n  default: 1.0\n",
         "reference_model_id: gpt-4o\nthresholds:\n  default: 1.1\n",
         "reference_model_id: gpt-4o\nthresholds:\n  default: not-a-number\n",
     ],

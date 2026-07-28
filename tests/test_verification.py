@@ -13,6 +13,16 @@ from costpilot.verification import (
 )
 
 
+class TrackingFakeProvider(FakeProvider):
+    def __init__(self, response: Response) -> None:
+        self.response = response
+        self.calls: list[tuple[Request, ModelConfig]] = []
+
+    def send(self, request: Request, model: ModelConfig) -> Response:
+        self.calls.append((request, model))
+        return self.response
+
+
 class SpyProvider:
     def __init__(self, response: Response) -> None:
         self.response = response
@@ -39,7 +49,7 @@ def test_verify_response_calls_reference_once_and_accounts_for_costs():
     request = Request(prompt="Summarize this quarterly report.", request_id="request-1")
     original = FakeProvider().send(request, FAKE_MODELS["claude-haiku"])
     reference = FakeProvider().send(request, FAKE_MODELS["gpt-4o"])
-    provider = SpyProvider(reference)
+    provider = TrackingFakeProvider(reference)
 
     result = verify_response(
         request, original, FAKE_MODELS["gpt-4o"], provider, threshold=1.0
@@ -68,7 +78,11 @@ def test_verify_response_reports_failed_comparison_for_divergent_fake_output():
     )
 
     result = verify_response(
-        request, original, FAKE_MODELS["gpt-4o"], SpyProvider(reference), threshold=1.0
+        request,
+        original,
+        FAKE_MODELS["gpt-4o"],
+        TrackingFakeProvider(reference),
+        threshold=1.0,
     )
 
     assert result.quality_score == 0.0
@@ -79,10 +93,36 @@ def test_verify_response_rejects_invalid_threshold_before_reference_execution():
     request = Request(prompt="Summarize this quarterly report.", request_id="request-1")
     original = FakeProvider().send(request, FAKE_MODELS["claude-haiku"])
     reference = FakeProvider().send(request, FAKE_MODELS["gpt-4o"])
-    provider = SpyProvider(reference)
+    provider = TrackingFakeProvider(reference)
 
     with pytest.raises(ValueError, match="between 0.0 and 1.0"):
         verify_response(request, original, FAKE_MODELS["gpt-4o"], provider, threshold=1.1)
+
+    assert provider.calls == []
+
+
+def test_verify_response_rejects_non_fake_provider_before_reference_execution():
+    request = Request(prompt="Summarize this quarterly report.", request_id="request-1")
+    original = FakeProvider().send(request, FAKE_MODELS["claude-haiku"])
+    reference = FakeProvider().send(request, FAKE_MODELS["gpt-4o"])
+    provider = SpyProvider(reference)
+
+    with pytest.raises(TypeError, match="FakeProvider"):
+        verify_response(request, original, FAKE_MODELS["gpt-4o"], provider, threshold=1.0)
+
+    assert provider.calls == []
+
+
+def test_verify_response_rejects_original_response_with_unknown_fake_model():
+    request = Request(prompt="Summarize this quarterly report.", request_id="request-1")
+    original = replace(
+        FakeProvider().send(request, FAKE_MODELS["claude-haiku"]),
+        model_id="not-a-fake-model",
+    )
+    provider = TrackingFakeProvider(FakeProvider().send(request, FAKE_MODELS["gpt-4o"]))
+
+    with pytest.raises(ValueError, match="unknown fake model"):
+        verify_response(request, original, FAKE_MODELS["gpt-4o"], provider, threshold=1.0)
 
     assert provider.calls == []
 
@@ -107,7 +147,7 @@ def test_should_escalate_is_a_pure_inverse_of_passed(passed: bool, expected: boo
 def test_rerun_with_reference_executes_reference_exactly_once():
     request = Request(prompt="Summarize this quarterly report.", request_id="request-1")
     reference = FakeProvider().send(request, FAKE_MODELS["gpt-4o"])
-    provider = SpyProvider(reference)
+    provider = TrackingFakeProvider(reference)
 
     response = rerun_with_reference(request, FAKE_MODELS["gpt-4o"], provider)
 
