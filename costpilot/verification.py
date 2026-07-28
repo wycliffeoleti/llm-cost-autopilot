@@ -4,11 +4,12 @@ import math
 import re
 from dataclasses import dataclass
 from pathlib import Path
-from typing import Any
+from typing import Any, Literal
 
 import yaml
 
-from costpilot.domain import ModelConfig
+from costpilot.domain import ModelConfig, Request, Response
+from costpilot.ports import Provider
 from costpilot.providers.fake import FAKE_MODELS
 
 
@@ -16,6 +17,19 @@ from costpilot.providers.fake import FAKE_MODELS
 class VerificationConfig:
     reference_model: ModelConfig
     default_threshold: float
+
+
+@dataclass(frozen=True)
+class VerificationResult:
+    original_model_id: str
+    reference_model_id: str
+    quality_score: float
+    threshold: float
+    passed: bool
+    simulated: Literal[True]
+    original_cost_usd: float
+    reference_cost_usd: float
+    escalation_cost_delta_usd: float
 
 
 def load_verification_config(path: Path) -> VerificationConfig:
@@ -45,3 +59,39 @@ def simulated_agreement_score(original_text: str, reference_text: str) -> float:
         return re.sub(r"^\[[^]]+\]\s*", "", text).strip()
 
     return 1.0 if normalize(original_text) == normalize(reference_text) else 0.0
+
+
+def verify_response(
+    request: Request,
+    original_response: Response,
+    reference_model: ModelConfig,
+    provider: Provider,
+    threshold: float,
+) -> VerificationResult:
+    """Compare an existing fake response with one explicit fake reference run."""
+    _validate_threshold(threshold)
+    reference_response = provider.send(request, reference_model)
+    if reference_response.model_id != reference_model.model_id:
+        raise ValueError("Reference response model ID does not match reference model")
+
+    quality_score = simulated_agreement_score(
+        original_response.output_text, reference_response.output_text
+    )
+    return VerificationResult(
+        original_model_id=original_response.model_id,
+        reference_model_id=reference_response.model_id,
+        quality_score=quality_score,
+        threshold=threshold,
+        passed=quality_score >= threshold,
+        simulated=True,
+        original_cost_usd=original_response.cost_usd,
+        reference_cost_usd=reference_response.cost_usd,
+        escalation_cost_delta_usd=reference_response.cost_usd - original_response.cost_usd,
+    )
+
+
+def _validate_threshold(threshold: float) -> None:
+    if isinstance(threshold, bool) or not isinstance(threshold, (int, float)):
+        raise TypeError("Verification threshold must be numeric")
+    if not math.isfinite(threshold) or not 0.0 <= threshold <= 1.0:
+        raise ValueError("Verification threshold must be between 0.0 and 1.0")
