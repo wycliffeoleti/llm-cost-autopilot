@@ -8,6 +8,7 @@ from costpilot.phase6 import FIXED_START_TIMESTAMP, iter_seeded_lifecycles, main
 from costpilot.service import OfflineService
 
 ROOT = Path(__file__).parent.parent
+ARTIFACT_DIRECTORY = ROOT / "docs" / "artifacts" / "phase6"
 
 
 def _service(database_path: Path) -> OfflineService:
@@ -72,3 +73,25 @@ def test_phase6_command_writes_a_static_report(tmp_path: Path) -> None:
     assert main([str(output_path)]) == 0
 
     assert output_path.is_file()
+
+
+def test_tracked_phase6_artifacts_are_aggregate_only_and_documented() -> None:
+    html_path = ARTIFACT_DIRECTORY / "seeded-lifecycle-report.html"
+    png_path = ARTIFACT_DIRECTORY / "seeded-lifecycle-report.png"
+    readme_path = ARTIFACT_DIRECTORY / "README.md"
+
+    assert html_path.is_file()
+    assert png_path.is_file()
+    assert png_path.read_bytes().startswith(b"\x89PNG\r\n\x1a\n")
+    public_text = "\n".join(
+        (
+            html_path.read_text(encoding="utf-8"),
+            readme_path.read_text(encoding="utf-8"),
+            (ROOT / "README.md").read_text(encoding="utf-8"),
+        )
+    )
+    assert "Offline deterministic seeded demonstration." in public_text
+    assert "uv run python -m costpilot.phase6" in public_text
+    assert "Summarize the following paragraph" not in public_text
+    assert "simulated response" not in public_text
+    assert re.search(r"\b[a-f0-9]{64}\b", public_text) is None

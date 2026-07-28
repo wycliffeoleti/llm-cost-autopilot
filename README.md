@@ -9,7 +9,36 @@ An offline, deterministic prototype of an LLM cost-routing pipeline (BASWE Proje
 - **Phase 3 — offline simulated verification and explicit escalation:** complete.
 - **Phase 4 — offline audit trail and static dashboard:** complete.
 - **Phase 5 — offline deterministic API:** complete.
-- **Phase 6** (containerization): not started.
+- **Phase 6 — truthful portfolio polish:** complete.
+
+## Phase 6 — offline deterministic seeded demonstration
+
+The tracked [Phase 6 artifact](docs/artifacts/phase6/README.md) is a
+self-contained aggregate report produced by replaying the repository's ten
+fixed synthetic fixture prompts six times in file order. It uses IDs
+`phase6-0001` through `phase6-0060`, fixed UTC timestamps, the existing local
+classifier and routing rules, simulated verification and explicit reruns, and
+`FakeProvider` only. It starts no server and makes no credential, network, or
+live-provider call.
+
+Regenerate its HTML from the repository root:
+
+```bash
+uv run python -m costpilot.phase6 docs/artifacts/phase6/seeded-lifecycle-report.html
+```
+
+The public report is aggregate-only. Request/response text, request-level
+records, temporary audit database, event exports, and provider/API payload
+captures remain out of the repository. The fixed-viewport PNG is a local
+capture of the self-contained HTML report, not a product UI or deployment.
+
+**Offline deterministic seeded demonstration.** The values shown are fixed
+simulated values from `FakeProvider`, not measurements of real spend, answer
+quality, routing efficacy, throughput, reliability, or realized savings. The
+routing dataset remains `ai_drafted_pending_human_review`; its labels and
+derived metrics are not real-world ground truth. A real evaluation would still
+need separately authorized privacy-reviewed data, human-reviewed labels,
+defined evaluation criteria, and an approved measurement protocol.
 
 ## Phase 5 — offline deterministic API
 

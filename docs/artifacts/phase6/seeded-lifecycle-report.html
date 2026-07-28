@@ -1,0 +1,26 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Phase 6 — Offline Seeded Lifecycle Report</title>
+<style>
+body { font-family: system-ui, sans-serif; color: #172033; background: #f6f8fb; margin: 0; }
+main { max-width: 960px; margin: 0 auto; padding: 2rem; }
+.banner { background: #fff3cd; border-left: 4px solid #b7791f; padding: 1rem; }
+dl { display: grid; grid-template-columns: minmax(18rem, 2fr) 1fr; gap: .5rem 1rem; }
+dt { font-weight: 600; } dd { margin: 0; text-align: right; }
+section { background: white; padding: 1rem; margin: 1rem 0; border-radius: .4rem; }
+table { width: 100%; border-collapse: collapse; } th, td { padding: .45rem; text-align: left; border-bottom: 1px solid #dce1ea; }
+td:last-child { text-align: right; } footer { margin-top: 1rem; }
+</style>
+</head>
+<body><main>
+<h1>Phase 6 — Offline Seeded Lifecycle Report</h1>
+<p class="banner">Offline deterministic prototype data. All responses, tokens, latency, verification values, and USD figures are simulated from FakeProvider and fixed constants. No live provider was called and the figures are not actual spend, answer quality, routing efficacy, or realized savings.</p>
+<p class="banner">Offline deterministic seeded demonstration. This artifact replays 60 request lifecycles from the repository&#x27;s fixed synthetic prompt fixture using FakeProvider, fixed constants, and fixed timestamps. It makes no network or live-provider calls and incurs no provider spend. Any tokens, latency, verification results, USD figures, or deltas shown are deterministic simulated values, not measurements of real spend, answer quality, routing efficacy, throughput, reliability, or realized savings. The routing dataset remains ai_drafted_pending_human_review; its labels and derived metrics are not real-world ground truth.</p>
+<section><h2>Simulated lifecycle summary</h2><dl><dt>Lifecycle coverage</dt><dd>60</dd><dt>Simulated lifecycle cost</dt><dd>$0.046662 simulated</dd><dt>Direct GPT-4o fake-response baseline</dt><dd>$0.029058 simulated</dd><dt>Routing-only simulated reduction versus direct GPT-4o fake response</dt><dd>$0.017964 simulated</dd><dt>End-to-end simulated delta versus direct GPT-4o fake response</dt><dd>$-0.017604 simulated</dd><dt>Verification pass rate</dt><dd>70.0%</dd><dt>Simulated escalation rate</dt><dd>30.0%</dd></dl></section>
+<section><h2>UTC daily simulated lifecycle cost</h2><table><thead><tr><th>Group</th><th>USD</th></tr></thead><tbody><tr><td>2026-07-28</td><td>$0.046662 simulated</td></tr></tbody></table></section><section><h2>UTC weekly simulated lifecycle cost</h2><table><thead><tr><th>Group</th><th>USD</th></tr></thead><tbody><tr><td>2026-W30</td><td>$0.046662 simulated</td></tr></tbody></table></section><section><h2>Routing distribution</h2><table><thead><tr><th>Group</th><th>Requests</th></tr></thead><tbody><tr><td>anthropic/claude-haiku</td><td>24</td></tr><tr><td>openai/gpt-4o</td><td>18</td></tr><tr><td>openai/gpt-4o-mini</td><td>18</td></tr></tbody></table></section><section><h2>Fake verification distribution</h2><table><thead><tr><th>Group</th><th>Requests</th></tr></thead><tbody><tr><td>passed</td><td>42</td></tr><tr><td>failed</td><td>18</td></tr></tbody></table></section>
+<footer class="banner">Offline deterministic prototype data. All responses, tokens, latency, verification values, and USD figures are simulated from FakeProvider and fixed constants. No live provider was called and the figures are not actual spend, answer quality, routing efficacy, or realized savings.</footer>
+</main></body>
+</html>
