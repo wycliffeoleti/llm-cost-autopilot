@@ -701,6 +701,76 @@
       "id": "c140",
       "tier": "tier_2",
       "text": "Analyze this website A/B test on page load time and conversion rate, and determine whether the data supports a causal link: Pages loading under 2 seconds converted at 4.8 percent. Pages loading 2 to 4 seconds converted at 3.9 percent. Pages loading over 4 seconds converted at 2.1 percent."
+    },
+    {
+      "id": "c141",
+      "tier": "tier_3",
+      "text": "Given these three job offers with different salary, equity, and location terms, walk through the trade-offs step by step and recommend one: Offer A, $150K salary, 0.1 percent equity, fully remote. Offer B, $135K salary, 0.4 percent equity, hybrid in a high cost-of-living city. Offer C, $160K salary, no equity, requires relocation to a lower cost-of-living city."
+    },
+    {
+      "id": "c142",
+      "tier": "tier_3",
+      "text": "Diagnose the likely root cause of this multi-service outage given these log excerpts, explaining your chain of reasoning: Service A logs show a spike in timeouts calling Service B at 14:02. Service B logs show its database connection pool exhausted starting at 14:00. A deployment to Service B's config went out at 13:58 reducing its max connections."
+    },
+    {
+      "id": "c143",
+      "tier": "tier_3",
+      "text": "Walk through the trade-offs of these two database migration strategies and recommend one given the constraints: The team has a 4-hour maintenance window, the dataset is 2TB, and the application cannot tolerate more than 10 minutes of write downtime. One option is a blue-green cutover, the other is an online schema migration tool."
+    },
+    {
+      "id": "c144",
+      "tier": "tier_3",
+      "text": "Given this set of interdependent project tasks and their durations, determine the critical path and explain your reasoning: Task A, 3 days, must finish before Task B, 5 days, and Task C, 2 days, can start. Task B and Task C must both finish before Task D, 1 day, can start."
+    },
+    {
+      "id": "c145",
+      "tier": "tier_3",
+      "text": "Reason through this pricing change scenario and predict the likely effect on both revenue and customer churn: The company plans to raise its base subscription price by 15 percent while adding a lower-tier plan at the old price point with reduced features."
+    },
+    {
+      "id": "c146",
+      "tier": "tier_3",
+      "text": "Given these conflicting sensor readings from a manufacturing line, determine which sensor is most likely malfunctioning and explain your reasoning: Sensor 1 reports temperature steady at 72F for six hours. Sensor 2 shows temperature fluctuating between 68F and 90F over the same period. The physical process being measured is known to run at a stable temperature."
+    },
+    {
+      "id": "c147",
+      "tier": "tier_3",
+      "text": "Walk through how you would allocate a limited $50,000 marketing budget across three channels given this performance data, and justify your allocation: Channel A returns $3 per $1 spent up to a $20,000 cap before diminishing returns. Channel B returns $2.50 per $1 spent with no known cap. Channel C is untested but has strong anecdotal signal."
+    },
+    {
+      "id": "c148",
+      "tier": "tier_3",
+      "text": "Given this set of symptoms and lab results, reason through the most likely explanation while noting what additional information would help confirm it: Patient reports fatigue and cold intolerance over three months. Lab results show elevated TSH and low free T4."
+    },
+    {
+      "id": "c149",
+      "tier": "tier_3",
+      "text": "Reason step by step through whether this proposed office layout change will likely increase or decrease cross-team collaboration, given this description: The plan replaces individual desks with a hybrid of hot-desking pods and dedicated team neighborhoods, removing assigned seating for individual contributors but keeping fixed seating for team leads."
+    },
+    {
+      "id": "c150",
+      "tier": "tier_3",
+      "text": "Given these two competing vendor proposals for a software contract, walk through a structured comparison and recommend one: Vendor X offers a lower upfront cost but a 3-year lock-in and limited customization. Vendor Y costs 20 percent more upfront but offers month-to-month terms and an open API for integrations."
+    },
+    {
+      "id": "c151",
+      "tier": "tier_3",
+      "text": "Diagnose why this A/B test's results might be misleading despite showing a statistically significant winner, given this description: The test ran for only 3 days, included a site-wide holiday sale during that window, and the winning variant was shown disproportionately to returning customers due to a caching bug."
+    },
+    {
+      "id": "c152",
+      "tier": "tier_3",
+      "text": "Walk through the second-order effects of this policy change on customer behavior: The company is removing free returns and replacing them with a flat $6.99 return shipping fee for all online orders."
+    },
+    {
+      "id": "c153",
+      "tier": "tier_3",
+      "text": "Given this incident timeline, determine at which step the escalation process broke down and explain why: Alert fired at 1:00 AM but was routed to a deprecated on-call rotation. A customer complaint was filed at 1:45 AM but not linked to the outage until 3:15 AM, when an engineer noticed the pattern manually."
+    },
+    {
+      "id": "c154",
+      "tier": "tier_3",
+      "text": "Reason through the likely long-term consequences of this staffing decision: The team is disbanding its dedicated QA function and distributing testing responsibilities across the existing engineers without adding headcount."
     }
   ]
 }
