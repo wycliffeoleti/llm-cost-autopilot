@@ -841,6 +841,76 @@
       "id": "c168",
       "tier": "tier_3",
       "text": "Draft a toast for a colleague's retirement after 30 years at the same company, striking a warm and slightly humorous tone."
+    },
+    {
+      "id": "c169",
+      "tier": "tier_3",
+      "text": "Write a short dialogue between two rival chefs meeting unexpectedly at a farmers market."
+    },
+    {
+      "id": "c170",
+      "tier": "tier_3",
+      "text": "Compose a brief tribute for a beloved family dog, focusing on the joy it brought the household."
+    },
+    {
+      "id": "c171",
+      "tier": "tier_3",
+      "text": "Write a scene where a detective realizes the key witness has been lying the entire time."
+    },
+    {
+      "id": "c172",
+      "tier": "tier_3",
+      "text": "Draft an imaginative opening paragraph for a science fiction novel set on a generation ship that has lost contact with Earth."
+    },
+    {
+      "id": "c173",
+      "tier": "tier_3",
+      "text": "Write a persuasive op-ed arguing that cities should redesign downtown areas around pedestrians rather than cars."
+    },
+    {
+      "id": "c174",
+      "tier": "tier_3",
+      "text": "Compose a short fable, in the tradition of Aesop, about a fox who learns the value of patience."
+    },
+    {
+      "id": "c175",
+      "tier": "tier_3",
+      "text": "Write a monologue for a character who has just decided to leave their hometown for good."
+    },
+    {
+      "id": "c176",
+      "tier": "tier_3",
+      "text": "Draft a whimsical bedtime story about a cloud who is afraid of rain."
+    },
+    {
+      "id": "c177",
+      "tier": "tier_3",
+      "text": "Write a suspenseful opening scene for a heist story set inside a museum after closing hours."
+    },
+    {
+      "id": "c178",
+      "tier": "tier_3",
+      "text": "Compose a heartfelt wedding speech from a sibling of the bride, including one embarrassing childhood memory."
+    },
+    {
+      "id": "c179",
+      "tier": "tier_3",
+      "text": "Write a short piece of flash fiction, no more than 150 words, about a lighthouse keeper's last night on the job before automation replaces the role."
+    },
+    {
+      "id": "c180",
+      "tier": "tier_3",
+      "text": "Draft a motivational speech for a youth soccer team before a championship match they are expected to lose."
+    },
+    {
+      "id": "c181",
+      "tier": "tier_3",
+      "text": "Write a comedic scene where two coworkers are stuck in an elevator during a fire drill."
+    },
+    {
+      "id": "c182",
+      "tier": "tier_3",
+      "text": "Compose a reflective personal essay opening about the first time you failed at something that mattered to you."
     }
   ]
 }
