@@ -3,6 +3,7 @@ from __future__ import annotations
 from pathlib import Path
 
 import yaml
+from sklearn.linear_model import LogisticRegression
 
 from costpilot.classifier import predict_tier
 from costpilot.domain import ModelConfig
@@ -23,5 +24,7 @@ def route(tier: str, config: dict[str, str]) -> ModelConfig:
     return FAKE_MODELS[model_id]
 
 
-def classify_and_route(prompt: str, model, routing_config: dict[str, str]) -> ModelConfig:
+def classify_and_route(
+    prompt: str, model: LogisticRegression, routing_config: dict[str, str]
+) -> ModelConfig:
     return route(predict_tier(prompt, model), routing_config)

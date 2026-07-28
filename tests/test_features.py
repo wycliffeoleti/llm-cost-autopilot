@@ -1,8 +1,12 @@
-from costpilot.features import token_count, instruction_verb_count
-from costpilot.features import constraint_count
-from costpilot.features import has_context
-from costpilot.features import output_format_complexity
-from costpilot.features import FEATURE_KEYS, extract_features
+from costpilot.features import (
+    FEATURE_KEYS,
+    constraint_count,
+    extract_features,
+    has_context,
+    instruction_verb_count,
+    output_format_complexity,
+    token_count,
+)
 
 
 def test_token_count_counts_whitespace_separated_words():

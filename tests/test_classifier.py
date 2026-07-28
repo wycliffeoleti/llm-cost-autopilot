@@ -1,7 +1,6 @@
 from pathlib import Path
 
 import pytest
-
 from sklearn.linear_model import LogisticRegression
 
 from costpilot.classifier import (
