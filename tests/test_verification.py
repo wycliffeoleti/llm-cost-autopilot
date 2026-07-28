@@ -4,7 +4,13 @@ import pytest
 
 from costpilot.domain import ModelConfig, Request, Response
 from costpilot.providers.fake import FAKE_MODELS, FakeProvider
-from costpilot.verification import simulated_agreement_score, verify_response
+from costpilot.verification import (
+    VerificationResult,
+    rerun_with_reference,
+    should_escalate,
+    simulated_agreement_score,
+    verify_response,
+)
 
 
 class SpyProvider:
@@ -79,3 +85,31 @@ def test_verify_response_rejects_invalid_threshold_before_reference_execution():
         verify_response(request, original, FAKE_MODELS["gpt-4o"], provider, threshold=1.1)
 
     assert provider.calls == []
+
+
+@pytest.mark.parametrize("passed, expected", [(True, False), (False, True)])
+def test_should_escalate_is_a_pure_inverse_of_passed(passed: bool, expected: bool):
+    result = VerificationResult(
+        original_model_id="claude-haiku",
+        reference_model_id="gpt-4o",
+        quality_score=1.0 if passed else 0.0,
+        threshold=1.0,
+        passed=passed,
+        simulated=True,
+        original_cost_usd=0.01,
+        reference_cost_usd=0.02,
+        escalation_cost_delta_usd=0.01,
+    )
+
+    assert should_escalate(result) is expected
+
+
+def test_rerun_with_reference_executes_reference_exactly_once():
+    request = Request(prompt="Summarize this quarterly report.", request_id="request-1")
+    reference = FakeProvider().send(request, FAKE_MODELS["gpt-4o"])
+    provider = SpyProvider(reference)
+
+    response = rerun_with_reference(request, FAKE_MODELS["gpt-4o"], provider)
+
+    assert response == reference
+    assert provider.calls == [(request, FAKE_MODELS["gpt-4o"])]

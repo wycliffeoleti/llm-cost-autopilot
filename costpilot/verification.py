@@ -90,6 +90,18 @@ def verify_response(
     )
 
 
+def should_escalate(result: VerificationResult) -> bool:
+    """Return whether the caller should explicitly request a reference rerun."""
+    return not result.passed
+
+
+def rerun_with_reference(
+    request: Request, reference_model: ModelConfig, provider: Provider
+) -> Response:
+    """Execute one explicit reference-model run without retry or persistence."""
+    return provider.send(request, reference_model)
+
+
 def _validate_threshold(threshold: float) -> None:
     if isinstance(threshold, bool) or not isinstance(threshold, (int, float)):
         raise TypeError("Verification threshold must be numeric")
