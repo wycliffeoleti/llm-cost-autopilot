@@ -3,7 +3,7 @@ from __future__ import annotations
 import hashlib
 import math
 import sqlite3
-from dataclasses import dataclass
+from dataclasses import dataclass, field
 from datetime import UTC, datetime
 from pathlib import Path
 from typing import Any
@@ -80,6 +80,7 @@ class AuditEvent:
     rerun_cost_microusd: int
     lifecycle_cost_microusd: int
     direct_gpt4o_cost_microusd: int
+    _provenance_verified: bool = field(default=False, init=False, repr=False, compare=False)
 
     def __post_init__(self) -> None:
         offset = self.timestamp.utcoffset()
@@ -103,6 +104,8 @@ class AuditEvent:
             self.routed_cost_microusd,
             "routed",
         )
+        if type(self.escalated) is not bool:
+            raise ValueError("Audit escalated must be a bool")
         if self.verification_model_id is None:
             if any(
                 value is not None
@@ -116,6 +119,8 @@ class AuditEvent:
         else:
             if self.verification_model_id not in FAKE_MODELS:
                 raise ValueError("Audit verification model must be canonical")
+            if FAKE_MODELS[self.verification_model_id].quality_tier != "high":
+                raise ValueError("Audit verification model must have high quality tier")
             if not all(
                 value is not None
                 for value in (
@@ -127,6 +132,7 @@ class AuditEvent:
                 raise ValueError("Audit verification fields must be present together")
             assert self.verification_quality_score is not None
             assert self.verification_threshold is not None
+            assert self.verification_passed is not None
             if (
                 isinstance(self.verification_quality_score, bool)
                 or isinstance(self.verification_threshold, bool)
@@ -136,7 +142,15 @@ class AuditEvent:
                 or not 0.0 <= self.verification_threshold <= 1.0
             ):
                 raise ValueError("Audit verification values must be finite values from 0.0 to 1.0")
+            if type(self.verification_passed) is not bool:
+                raise ValueError("Audit verification passed must be a bool")
+            if self.verification_passed != (
+                self.verification_quality_score >= self.verification_threshold
+            ):
+                raise ValueError("Audit verification pass state must match its quality threshold")
             _validate_microdollars(self.verification_cost_microusd, "verification")
+            if self.verification_cost_microusd == 0:
+                raise ValueError("Audit verification cost must be positive when verification is present")
         if self.escalated != (self.rerun_model_id is not None):
             raise ValueError("Audit escalation state must match rerun fields")
         if self.rerun_model_id is None:
@@ -192,16 +206,18 @@ class AuditEvent:
             raise ValueError("Audit timestamp must be timezone-aware UTC")
         if offset.total_seconds() != 0:
             raise ValueError("Audit timestamp must be UTC")
-        _validate_response(routed_response, "Routed")
+        _validate_deterministic_response(request, routed_response, "Routed")
+        if rerun_response is not None:
+            _validate_deterministic_response(request, rerun_response, "Rerun")
         if verification is None:
             if verification_response is not None or rerun_response is not None:
                 raise ValueError("Audit verification data requires a verification result")
         else:
-            if not verification.simulated:
+            if verification.simulated is not True:
                 raise ValueError("Audit verification result must be simulated")
             if verification_response is None:
                 raise ValueError("Audit verification response is required")
-            _validate_response(verification_response, "Verification")
+            _validate_deterministic_response(request, verification_response, "Verification")
             if (
                 verification.original_model_id != routed_response.model_id
                 or verification.reference_model_id != verification_response.model_id
@@ -213,6 +229,8 @@ class AuditEvent:
                 raise ValueError("Audit verification provenance does not match the simulated responses")
             if FAKE_MODELS[verification_response.model_id].quality_tier != "high":
                 raise ValueError("Audit verification model must have high quality tier")
+            if type(verification.passed) is not bool:
+                raise ValueError("Audit verification result passed state must be a bool")
             expected_score = simulated_agreement_score(
                 routed_response.output_text, verification_response.output_text
             )
@@ -224,15 +242,16 @@ class AuditEvent:
                 - _microdollars(routed_response.cost_usd)
             ):
                 raise ValueError("Audit verification result does not match simulated lifecycle data")
-            if rerun_response is not None:
-                _validate_response(rerun_response, "Rerun")
-                if rerun_response.model_id != verification_response.model_id:
-                    raise ValueError("Audit rerun must use the verification model")
+            if (
+                rerun_response is not None
+                and rerun_response.model_id != verification_response.model_id
+            ):
+                raise ValueError("Audit rerun must use the verification model")
         direct_response = FakeProvider().send(request, FAKE_MODELS["gpt-4o"])
         utc_timestamp = timestamp.astimezone(UTC)
         verification_cost = 0 if verification_response is None else _microdollars(verification_response.cost_usd)
         rerun_cost = 0 if rerun_response is None else _microdollars(rerun_response.cost_usd)
-        return cls(
+        event = cls(
             timestamp=utc_timestamp,
             request_id=request.request_id,
             prompt_hash=hashlib.sha256(request.prompt.encode("utf-8")).hexdigest(),
@@ -259,11 +278,20 @@ class AuditEvent:
             ),
             direct_gpt4o_cost_microusd=_microdollars(direct_response.cost_usd),
         )
+        object.__setattr__(event, "_provenance_verified", True)
+        return event
 
 
 def _validate_microdollars(value: int, field: str) -> None:
     if isinstance(value, bool) or not isinstance(value, int) or value < 0:
         raise ValueError(f"Audit {field} cost must be a non-negative integer microdollar amount")
+
+
+def _validate_deterministic_response(request: Request, response: Response, field: str) -> None:
+    _validate_response(response, field)
+    expected = FakeProvider().send(request, FAKE_MODELS[response.model_id])
+    if response != expected:
+        raise ValueError(f"{field} response does not match the supplied request and canonical fake model")
 
 
 def _validate_fields(
@@ -342,6 +370,8 @@ class SQLiteAuditStore:
             )
 
     def append(self, event: AuditEvent) -> None:
+        if not event._provenance_verified:
+            raise ValueError("Audit events must be provenance-verified by from_lifecycle before persistence")
         values = _event_values(event)
         try:
             with self._connect() as connection:
@@ -433,7 +463,7 @@ def _event_values(event: AuditEvent) -> dict[str, Any]:
 
 
 def _event_from_row(row: sqlite3.Row) -> AuditEvent:
-    return AuditEvent(
+    event = AuditEvent(
         timestamp=datetime.fromisoformat(str(row["timestamp"])),
         request_id=str(row["request_id"]),
         prompt_hash=str(row["prompt_hash"]),
@@ -458,6 +488,8 @@ def _event_from_row(row: sqlite3.Row) -> AuditEvent:
         lifecycle_cost_microusd=int(row["lifecycle_cost_microusd"]),
         direct_gpt4o_cost_microusd=int(row["direct_gpt4o_cost_microusd"]),
     )
+    object.__setattr__(event, "_provenance_verified", True)
+    return event
 
 
 def _optional_str(value: Any) -> str | None:

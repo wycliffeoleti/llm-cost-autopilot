@@ -1,7 +1,7 @@
 from __future__ import annotations
 
 import sqlite3
-from dataclasses import replace
+from dataclasses import fields, replace
 from datetime import UTC, datetime
 from pathlib import Path
 
@@ -12,7 +12,12 @@ from costpilot.classifier import load_dataset, train_classifier
 from costpilot.domain import Request
 from costpilot.providers.fake import FAKE_MODELS, FakeProvider
 from costpilot.routing import classify_and_route, load_routing_config
-from costpilot.verification import VerificationResult, load_verification_config, verify_response
+from costpilot.verification import (
+    VerificationResult,
+    load_verification_config,
+    simulated_agreement_score,
+    verify_response,
+)
 
 DATASET_PATH = Path(__file__).parent.parent / "data" / "complexity_dataset.draft.json"
 ROUTING_CONFIG_PATH = Path(__file__).parent.parent / "config" / "routing.yaml"
@@ -27,24 +32,24 @@ def _event(
     verification: bool = False,
     rerun: bool = False,
 ) -> AuditEvent:
-    request = Request(prompt=prompt, request_id=request_id)
+    request = Request(
+        prompt="word word word word word word word word word" if rerun else prompt,
+        request_id=request_id,
+    )
     provider = FakeProvider()
     routed = provider.send(request, FAKE_MODELS["claude-haiku"])
     if not verification:
         return AuditEvent.from_lifecycle(timestamp, request, "tier_1", routed)
 
     reference = provider.send(request, FAKE_MODELS["gpt-4o"])
-    verification_response = (
-        replace(reference, output_text="[gpt-4o] simulated response (digest=divergent)")
-        if rerun
-        else reference
-    )
+    verification_response = reference
+    score = simulated_agreement_score(routed.output_text, verification_response.output_text)
     result = VerificationResult(
         original_model_id=routed.model_id,
         reference_model_id=verification_response.model_id,
-        quality_score=0.0 if rerun else 1.0,
+        quality_score=score,
         threshold=1.0,
-        passed=not rerun,
+        passed=score >= 1.0,
         simulated=True,
         original_cost_usd=routed.cost_usd,
         reference_cost_usd=verification_response.cost_usd,
@@ -118,6 +123,67 @@ def test_event_rejects_invalid_provenance_and_inconsistent_totals():
     event = _event()
     with pytest.raises(ValueError, match="lifecycle"):
         replace(event, lifecycle_cost_microusd=event.lifecycle_cost_microusd + 1)
+
+
+@pytest.mark.parametrize("response_kind", ["routed", "verification", "rerun"])
+def test_event_rejects_response_injected_from_another_request(response_kind: str):
+    request = Request(
+        prompt="word word word word word word word word word", request_id="request-1"
+    )
+    other_request = Request(
+        prompt="other other other other other other other other other", request_id="request-2"
+    )
+    provider = FakeProvider()
+    routed = provider.send(request, FAKE_MODELS["claude-haiku"])
+    reference = provider.send(request, FAKE_MODELS["gpt-4o"])
+    score = simulated_agreement_score(routed.output_text, reference.output_text)
+    verification = VerificationResult(
+        original_model_id=routed.model_id,
+        reference_model_id=reference.model_id,
+        quality_score=score,
+        threshold=1.0,
+        passed=score >= 1.0,
+        simulated=True,
+        original_cost_usd=routed.cost_usd,
+        reference_cost_usd=reference.cost_usd,
+        escalation_cost_delta_usd=reference.cost_usd - routed.cost_usd,
+    )
+    kwargs = {
+        "routed_response": routed,
+        "verification": verification,
+        "verification_response": reference,
+        "rerun_response": reference,
+    }
+    if response_kind == "routed":
+        kwargs["routed_response"] = provider.send(other_request, FAKE_MODELS["claude-haiku"])
+    elif response_kind == "verification":
+        kwargs["verification_response"] = provider.send(other_request, FAKE_MODELS["gpt-4o"])
+    else:
+        kwargs["rerun_response"] = provider.send(other_request, FAKE_MODELS["gpt-4o"])
+
+    with pytest.raises(ValueError, match="does not match the supplied request"):
+        AuditEvent.from_lifecycle(datetime.now(UTC), request, "tier_1", **kwargs)
+
+
+def test_direct_events_require_exact_booleans_and_valid_verification_relationships(tmp_path):
+    event = _event(verification=True)
+
+    with pytest.raises(ValueError, match="verification model must have high quality tier"):
+        replace(event, verification_model_id="claude-haiku")
+    with pytest.raises(ValueError, match="verification passed must be a bool"):
+        replace(event, verification_passed=1)
+    with pytest.raises(ValueError, match="escalated must be a bool"):
+        replace(event, escalated=0)
+    with pytest.raises(ValueError, match="verification pass state"):
+        replace(event, verification_passed=not event.verification_passed)
+    with pytest.raises(ValueError, match="verification cost must be positive"):
+        replace(event, verification_cost_microusd=0)
+
+    direct_event = AuditEvent(
+        **{field.name: getattr(event, field.name) for field in fields(AuditEvent) if field.init}
+    )
+    with pytest.raises(ValueError, match="provenance-verified"):
+        SQLiteAuditStore(tmp_path / "audit.sqlite3").append(direct_event)
 
 
 def test_store_reads_events_in_timestamp_then_insertion_order_and_never_leaks_prompt_or_output(tmp_path):
